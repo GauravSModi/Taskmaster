@@ -46,10 +46,10 @@ function TodoList() {
         <div className="TodoList">
             {tasks.map(task => (
                 <TodoItem
-                    KEY = {task.id}
-                    TASK = {task}
-                    DELETETASK = {deleteTask}
-                    TOGGLECOMPLETED = {toggleCompleted}
+                    key = {task.id}
+                    task = {task}
+                    deleteTask = {deleteTask}
+                    toggleCompleted = {toggleCompleted}
                 />
             ))}
             <input 
@@ -57,7 +57,7 @@ function TodoList() {
                 onChange={E=> setText(E.target.value)}
             />
             <button
-                onClick={(text) => addTask(text)}>
+                onClick={() => addTask(text)}>
                 Add
             </button>
         </div>
