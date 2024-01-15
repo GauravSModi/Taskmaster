@@ -37,6 +37,11 @@
   }
 } */
 
+.App {
+  margin-top: auto;
+  margin-left: 150px;
+  margin-right: 150px;
+}
 
 .todo-item {
   display: flex;
