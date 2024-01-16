@@ -1,3 +1,42 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+.App {
+  margin-top: auto;
+  margin-left: 150px;
+  margin-right: 150px;
+  background-color: white;  
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.todo-item p {
+  color: #888;
+  text-decoration: line-through;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* .App {
   text-align: center;
 }
@@ -36,20 +75,3 @@
     transform: rotate(360deg);
   }
 } */
-
-.App {
-  margin-top: auto;
-  margin-left: 150px;
-  margin-right: 150px;
-}
-
-.todo-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.todo-item p {
-  color: #888;
-  text-decoration: line-through;
-}
