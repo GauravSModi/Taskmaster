@@ -12,17 +12,35 @@ const LoginForm = () => {
 
     return (
         <form onSubmit={handleLogin}>
-            <label>
-                Username:
-                <input type="text" value={username} onChange={event => setUsername(event.target.value)}></input>
+        <div className='mb-3'>
+            <label htmlFor='loginUsername' className='form-label'>
+                Username
             </label>
-            <br/>
-            <label>
-                Password:
-                <input type="password" value={password} onChange={event => setPassword(event.target.value)}></input>
+            <input 
+                type='text'
+                id='loginUsername'
+                className='form-control'
+                value={username} 
+                onChange={event => setUsername(event.target.value)}
+                placeholder='Username'
+            />
+        </div>
+        <div className='mb-3'>
+            <label htmlFor='loginPassword' className='form-label'>
+                Password
             </label>
-            <br/>
-            <button type="submit">Login</button>
+            <input 
+                type='password'
+                id='loginPassword'
+                className='form-control'
+                value={password}
+                onChange={event => setPassword(event.target.value)}
+                placeholder='Password'
+            />
+        </div>
+        <div className='mb-2'>
+            <button type='submit' className='btn btn-primary'>Login</button>
+        </div>
         </form>
     );
 };

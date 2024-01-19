@@ -22,7 +22,7 @@ function App() {
     <div className="App">
       <h1>{message}</h1>
       {isLogin ? <LoginForm /> : <SignupForm />}
-      <button onClick={handleToggleForm}>
+      <button onClick={handleToggleForm} className='btn btn-secondary'>
         {isLogin ? 'Switch to Sign Up' : 'Switch to Login'}
       </button>
     </div>
