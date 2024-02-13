@@ -11,7 +11,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8008/message")
+    fetch("http://localhost:8009/message")
       .then((res) => res.json())
       .then((data) => setMessage(data.message));
   }, []);
