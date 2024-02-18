@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import TodoList from './components/TodoList/TodoList';
 import LoginForm from './components/Auth/Login';
-import SignupForm from './components/Auth/Signup';
 import './App.css';
 
 
@@ -16,17 +14,11 @@ function App() {
       .then((data) => setMessage(data.message));
   }, []);
 
-  const handleToggleForm = () => {
-    setIsLogin(prevState => !prevState);
-  };
-
   return (
     <div className="App">
       <h1>{message}</h1>
-      {isLogin ? <LoginForm /> : <SignupForm />}
-      <button onClick={handleToggleForm} className='btn btn-secondary'>
-        {isLogin ? 'Switch to Sign Up' : 'Switch to Login'}
-      </button>
+      <LoginForm />
+      {/* {isLogin ? <LoginForm /> : <SignupForm />} */}
     </div>
   );
 }

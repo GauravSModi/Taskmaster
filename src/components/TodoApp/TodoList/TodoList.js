@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TodoItem from './TodoItem/TodoItem';
+import TodoItem from '../TodoItem/TodoItem';
 
 function TodoList() {
     const [tasks, setTasks] = useState([
