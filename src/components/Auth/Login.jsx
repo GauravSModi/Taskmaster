@@ -8,6 +8,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
+    const [token, setToken] = useState(null);
 
     const checkEmpty = (user, pass) => {
         return user.length > 0 && pass.length > 0;
@@ -57,7 +58,7 @@ const LoginForm = () => {
             if (response.ok) {
                 const data = await response.json();
 
-                const jwtToken = data.token;
+                setToken(data.token);
 
                 // Move on to application
                 setLoginSuccess(true);
@@ -82,7 +83,9 @@ const LoginForm = () => {
     };
 
     if (loginSuccess) {
-        return <TodoApp />;
+        console.log(token);
+
+        if (token != null) return <TodoApp token={token}/>;
     }
 
     if (isSignup) {
