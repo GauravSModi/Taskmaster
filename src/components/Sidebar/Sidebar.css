@@ -1,0 +1,14 @@
+.app-sidebar {
+    position: fixed; /* or position: absolute; */
+    left: 0; /* Stick to the left side of the screen */
+    top: 0; /* Adjust the top position as needed */
+    height: 100%; /* Take up the full height of the screen */
+    display: 'flex'; /* Adjust the width as needed */
+    background-color: #f0f0f0; /* Example background color */
+    /* Add any additional styles for your sidebar */
+    /* direction: rtl ? 'rtl' : 'ltr'; */
+  }
+
+.menuitem {
+    background-color: #f0f0f0;
+}

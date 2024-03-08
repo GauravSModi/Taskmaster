@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import App_Sidebar from '../Sidebar/Sidebar';
 import { Modal } from 'react-bootstrap';
 
 const TodoApp = (props) => {
@@ -85,20 +85,8 @@ const TodoApp = (props) => {
 
     return (
         <div>
+            {/* <App_Sidebar/> */}
             <div>
-                <Sidebar>
-                <Menu>
-                    <SubMenu label="Charts">
-                    <MenuItem> Pie charts </MenuItem>
-                    <MenuItem> Line charts </MenuItem>
-                    </SubMenu>
-                    <MenuItem> Documentation </MenuItem>
-                    <MenuItem> Calendar </MenuItem>
-                </Menu>
-                </Sidebar>
-            </div>
-            <div>
-
                 {listTitles.map(task => (
                     <div
                         key={task.list_id}
@@ -118,18 +106,20 @@ const TodoApp = (props) => {
                     <Modal.Body>
                         {List && (
                             <div>
-                                <ul>
+                                {/* <ul> */}
                                     {List.map(task => (
                                         <div 
                                             key={task[0]}
                                             className="form-check" >
-                                            <input className="form-check-input" type="checkbox" value="option1" id="flexCheckDefault"></input>
-                                            <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                
+                                                
+                                            <input className="form-check-input" type="checkbox" id={task[0]}></input>
+                                            <label className="form-check-label" for={task[0]}>
                                             {task[1]}
                                             </label>
                                         </div>
                                     ))}
-                                </ul>
+                                {/* </ul> */}
                             </div>
                         )}
                     </Modal.Body>

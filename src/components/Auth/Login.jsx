@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import TodoApp from '../TodoApp/TodoApp';
 import appendAlert from '../Alert/AlertComponent';
 import SignupForm from './Signup';
-import '../../App.css';
 import './Auth.css';
 
 const LoginForm = () => {
@@ -95,7 +94,7 @@ const LoginForm = () => {
     }
 
     return (
-        <div id="auth-form-container">
+        <div className="auth-form-container">
             <form onSubmit={handleLogin}>
                 <div id='liveAlertPlaceholder'></div>
                 <div className='mb-3'>
