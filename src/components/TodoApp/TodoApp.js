@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import TodoList from './TodoList/TodoList';
-import { Card } from 'react-bootstrap';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { Modal } from 'react-bootstrap';
 
 const TodoApp = (props) => {
 
     const [listTitles, setListTitles] = useState([]);
+    const [List, setList] = useState(null); // State to keep track of the list
+    const [Title, setTitle] = useState(null); // State to keep track of the title
+    const [showModal, setShowModal] = useState(false); // State to manage modal visibility
+    // const [collapsed, setCollapsed] = React.useState(false);
+
 
     useEffect(() => {
         // Function to be called immediately upon component mount
@@ -12,10 +17,16 @@ const TodoApp = (props) => {
     }, []); // Empty dependency array ensures the effect runs only once
 
     const token = props.token;
+    
+    const closeList = () => {
+        setTitle(null);
+        setList(null);
+        setShowModal(false); // Close the modal
+    };
 
     const openList = async (task) => {
         const list_id = task.list_id;
-        console.log('openList: ' + list_id);
+
         try {
             const response = await fetch('http://localhost:8009/list', {
                 method: 'POST',
@@ -28,7 +39,17 @@ const TodoApp = (props) => {
 
             if (response.ok) { // in the 200 range
                 const data = await response.json();
-                console.log(data.tasks);
+                let task_list = []; // Holds description of tasks
+
+                if (!data.tasks.includes('No Tasks Found')){
+                    task_list = data.tasks.map(task => {
+                        return [task.task_id, task.description, task.is_completed];
+                    })
+                }
+
+                setTitle(task.title);
+                setList(task_list);
+                setShowModal(true); // Open the modal
             } else {
                 const errorData = await response.json();
                 console.log(errorData);
@@ -62,30 +83,65 @@ const TodoApp = (props) => {
         }
     };
 
-    
-
     return (
-        // <div className="card" style={{width: "18rem"}}>
-        //     <div className="card-body">
-        //         <h5 className="card-title">{props.token}</h5>
-        //         {/* <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> */}
-        //         <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        //         <a href="#" className="card-link">Card link</a>
-        //         <a href="#" className="card-link">Another link</a>
-        //     </div>
-        // </div>
-
         <div>
-            {listTitles.map(task => (
-                <div className="card shadow-sm p-2 mb-3 .bg-light.bg-gradient rounded" 
-                    onClick={() => openList(task)} >
-                    <div className="card-title">
-                        {task.title}
+            <div>
+                <Sidebar>
+                <Menu>
+                    <SubMenu label="Charts">
+                    <MenuItem> Pie charts </MenuItem>
+                    <MenuItem> Line charts </MenuItem>
+                    </SubMenu>
+                    <MenuItem> Documentation </MenuItem>
+                    <MenuItem> Calendar </MenuItem>
+                </Menu>
+                </Sidebar>
+            </div>
+            <div>
+
+                {listTitles.map(task => (
+                    <div
+                        key={task.list_id}
+                        className="card shadow-sm p-2 mb-3 .bg-light.bg-gradient rounded"
+                        style={{width: "18rem"}}
+                        onClick={() => openList(task)} >
+                            
+                        <div className="card-title">{task.title}</div>
                     </div>
-                </div>
-            ))}
+                ))}
+                
+                {/* Modal Component */}
+                <Modal show={showModal} onHide={closeList}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{List && Title}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {List && (
+                            <div>
+                                <ul>
+                                    {List.map(task => (
+                                        <div 
+                                            key={task[0]}
+                                            className="form-check" >
+                                            <input className="form-check-input" type="checkbox" value="option1" id="flexCheckDefault"></input>
+                                            <label className="form-check-label" htmlFor="flexCheckDefault">
+                                            {task[1]}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={closeList}>Close</button>
+                        <button type="button" className="btn btn-primary">Save changes</button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
         </div>
     );
 };
+
 
 export default TodoApp;

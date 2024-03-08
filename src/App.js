@@ -6,7 +6,6 @@ import './App.css';
 
 function App() {
   const [message, setMessage] = useState("");
-  const [isLogin, setIsLogin] = useState(true);
 
   useEffect(() => {
     fetch("http://localhost:8009/message")
@@ -18,7 +17,6 @@ function App() {
     <div className="App">
       <h1>{message}</h1>
       <LoginForm />
-      {/* {isLogin ? <LoginForm /> : <SignupForm />} */}
     </div>
   );
 }
