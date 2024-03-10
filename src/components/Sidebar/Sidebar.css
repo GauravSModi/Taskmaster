@@ -4,11 +4,46 @@
     top: 0; /* Adjust the top position as needed */
     height: 100%; /* Take up the full height of the screen */
     display: 'flex'; /* Adjust the width as needed */
-    background-color: #f0f0f0; /* Example background color */
+    /* background-color: #424874; */
+    /* color: white; */
     /* Add any additional styles for your sidebar */
     /* direction: rtl ? 'rtl' : 'ltr'; */
-  }
+}
 
 .menuitem {
-    background-color: #f0f0f0;
+    /* background-color: #424874; */
+    /* color: white; */
+    
+}
+
+.menuitem span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+    /* background-color: #424874; */
+}
+
+
+.menuitem span:after {
+    /* content: '\00bb'; */
+    /* background-color: #424874; */
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.menuitem:hover {
+    /* background-color: #424874; */
+}
+
+.menuitem:hover span {
+    padding-right: 25px;
+}
+
+.menuitem:hover span:after {
+    opacity: 1;
+    right: 0;
 }

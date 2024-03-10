@@ -1,0 +1,10 @@
+#cards {
+    color: black;
+    background-color: #A6B1E1;
+    border: #A6B1E1;
+}
+
+#cards:hover {
+    background-color: #9FA9E1;
+    box-shadow: none;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import App_Sidebar from '../Sidebar/Sidebar';
 import { Modal } from 'react-bootstrap';
+import './Todo.css';
 
 const TodoApp = (props) => {
 
@@ -85,15 +86,16 @@ const TodoApp = (props) => {
 
     return (
         <div>
-            {/* <App_Sidebar/> */}
+            <App_Sidebar/>
             <div>
                 {listTitles.map(task => (
                     <div
                         key={task.list_id}
-                        className="card shadow-sm p-2 mb-3 .bg-light.bg-gradient rounded"
+                        id='cards'
+                        className="card shadow-sm p-2 mb-3 rounded"
                         style={{width: "18rem"}}
                         onClick={() => openList(task)} >
-                            
+
                         <div className="card-title">{task.title}</div>
                     </div>
                 ))}
