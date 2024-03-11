@@ -2,7 +2,7 @@ import { Sidebar, Menu, MenuItem, SubMenu, menuClasses, sidebarClasses } from 'r
 import './Sidebar.css';
 
 
-const App_Sidebar = () => {
+const AppSidebar = () => {
     return (
         <div className='app-sidebar'
         style={{display: 'flex', height: '100%'}}>
@@ -55,4 +55,4 @@ const App_Sidebar = () => {
     );
 };
 
-export default App_Sidebar;
+export default AppSidebar;
