@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TodoApp from '../TodoApp/TodoApp';
-import appendAlert from '../Alert/AlertComponent';
 import LoginForm from './Login';
+import logo from '../../logo.svg';
 import './Auth.css';
 
 const SignupForm = () => {
@@ -10,7 +10,20 @@ const SignupForm = () => {
     const [password, setPassword] = useState('');
     const [signupSuccess, setSignupSuccess] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
 
+
+    const createAlert = (message) => {
+        setAlertMessage(message);
+        setShowAlert(true);
+    };
+
+    const destroyAlert = () => {
+        setShowAlert(false);
+        setAlertMessage(null);
+    };
+    
     const validateUsername = (input) => {
         const minLength = 5;
         const maxLength = 20;
@@ -35,22 +48,16 @@ const SignupForm = () => {
     const handleSignup = async (event) => {
         event.preventDefault();
         console.log('Signup clicked');
-        const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-        alertPlaceholder.innerHTML = '';
 
         // Check if username is valid
         if (!validateUsername(username)) {
-            if (alertPlaceholder != null) {
-                appendAlert(alertPlaceholder, 'Invalid username. Username must be between 5 to 20 characters long and contain only alphanumeric characters and underscores.', 'warning');
-            }
+            createAlert('Invalid username. Username must be between 5 to 20 characters long and contain only alphanumeric characters and underscores.');
             return;
         }
 
         // Check if password is valid
         if (!validatePassword(password)) {
-            if (alertPlaceholder != null) {
-                appendAlert(alertPlaceholder, 'Invalid password. Password must be between 5 to 20 characters long and contain only alphanumeric characters and the following symbols: _-!@#$%^&*().', 'warning');
-            }
+            createAlert('Invalid password. Password must be between 5 to 20 characters long and contain only alphanumeric characters and the following symbols: _-!@#$%^&*().')
             return;
         };
 
@@ -74,11 +81,11 @@ const SignupForm = () => {
                 // Signup failed due to an error
                 const errorData = await response.json();
 
-                if (errorData.message.includes('duplicate') && alertPlaceholder != null){
+                if (errorData.message.includes('duplicate')){
                     if (errorData.message.includes('username')) {
-                        appendAlert(alertPlaceholder, 'Username taken, please choose another.', 'warning');
+                        createAlert('Username taken, please choose another.');
                     } else if (errorData.message.includes('email')) {
-                        appendAlert(alertPlaceholder, 'The email you provided is already associated with an existing account. Please use a different email address or try logging in instead.', 'warning');
+                        createAlert('The email you provided is already associated with an existing account. Please use a different email address or try logging in instead.');
                     }
                 } else {
                     console.error("Signup error: ", errorData.message);
@@ -98,17 +105,18 @@ const SignupForm = () => {
     }
 
     return (
-        <div className="auth-form-container">
-            <form onSubmit={handleSignup}>
-                <div id='liveAlertPlaceholder'></div>
+        <div className="auth-form-container py-5">
+            
+            <img className="pb-4" src={logo} alt="My Logo" /> {/* Display the logo image */}
+            <form onSubmit={handleSignup} >
                 <div className='mb-3'>
-                    <label htmlFor='signupUsername' className='form-label'>
+                    {/* <label htmlFor='signupUsername' className='form-label float-start'>
                         Username
-                    </label>
+                    </label> */}
                     <input
                         type='text'
                         id='signupUsername'
-                        className='form-control'
+                        className='form-control fw-lighter'
                         value={username}
                         onChange={event => setUsername(event.target.value)}
                         placeholder='Username'
@@ -116,13 +124,13 @@ const SignupForm = () => {
                 </div>
 
                 <div className='mb-3'>
-                    <label htmlFor='signupEmail' className='form-label'>
+                    {/* <label htmlFor='signupEmail' className='form-label float-start'>
                         Email
-                    </label>
+                    </label> */}
                     <input
                         type='email'
                         id='signupEmail'
-                        className='form-control'
+                        className='form-control fw-lighter'
                         value={email}
                         onChange={event => setEmail(event.target.value)}
                         placeholder='Email address'
@@ -130,30 +138,39 @@ const SignupForm = () => {
                 </div>
 
                 <div className='mb-3'>
-                    <label htmlFor='signupPassword' className='form-label'>
+                    {/* <label htmlFor='signupPassword' className='form-label float-start'>
                         Password
-                    </label>
+                    </label> */}
                     <input
                         type='password'
                         id='signupPassword'
-                        className='form-control'
+                        className='form-control fw-lighter'
                         value={password}
                         onChange={event => setPassword(event.target.value)}
                         placeholder='Password'
                     />
                 </div>
 
-                <div className='mb-2'>
-                    <button type='submit' className='btn btn-primary'>
+                <div className='mt-5'>
+                    <button type='submit' className='btn btn-primary w-100'>
                         Sign up
                     </button>
                 </div>
             </form>
-            <div className='mb-2'>
-                <button id='switchAuthButton' onClick={handleToggleForm} className='btn btn-secondary'>
-                    Switch to Login
+            <div className='mt-2'>
+                <button id='switchAuthButton' onClick={handleToggleForm} className='btn btn-link text-dark fw-light'>
+                    Have an account? Switch to Login
                 </button>
             </div>
+
+            {showAlert && (
+                <div className="alert-container">
+                    <div className="alert alert-warning alert-dismissible text-break fw-light lh-2" role="alert">
+                        {alertMessage}
+                        <button type="button" className="btn-close" onClick={destroyAlert} aria-label="Close"></button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

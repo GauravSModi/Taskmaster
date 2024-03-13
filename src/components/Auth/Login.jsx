@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import TodoApp from '../TodoApp/TodoApp';
-import appendAlert from '../Alert/AlertComponent';
 import SignupForm from './Signup';
+import logo from '../../logo.svg';
 import './Auth.css';
 
 const LoginForm = () => {
@@ -10,40 +10,34 @@ const LoginForm = () => {
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
     const [token, setToken] = useState(null);
+    const [alertMessage, setAlertMessage] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
 
     const checkEmpty = (user, pass) => {
         return user.length > 0 && pass.length > 0;
-    }
-
-    const handleToggleForm = () => {
-      setIsSignup(true);
     };
 
-    // // Disable button until fields are populated
-    // const [input, setInput] = useState(''); // For input
-    // const [isdisabled, setIsDisabled] = useState(false); // For button
-    // // When input is changing this function will get called
-    // const onChange = (e) => {
-    //     setInput((prevState) => (e.target.value));
-    //     if(e.target.value.trim().length < 1) {   // Checking the length of the input
-    //         setIsDisabled(true);  // Disabling the button if length is < 1
-    //     } else {
-    //         setIsDisabled(false);
-    //     }
-    // }
+    const createAlert = (message) => {
+        setAlertMessage(message);
+        setShowAlert(true);
+    };
+
+    const destroyAlert = () => {
+        setShowAlert(false);
+        setAlertMessage(null);
+    };
+
+    const handleToggleForm = () => {
+        setIsSignup(true);
+    };
 
     const handleLogin = async (event) => {
         event.preventDefault();
         console.log("Login clicked");
 
-        const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-        alertPlaceholder.innerHTML = '';
-
         // Check if username or password fields are empty
         if (!checkEmpty(username, password)) {
-            if (alertPlaceholder != null) {
-                appendAlert(alertPlaceholder, 'Please fill in both the username and password fields.', 'warning');
-            }
+            createAlert('Please fill in both the username and password fields.');
             return;
         }
         
@@ -68,11 +62,12 @@ const LoginForm = () => {
                 // Login failed due to an error
                 const errorData = await response.json();
 
-                if (errorData.message.includes('unsuccessful') && alertPlaceholder != null){
+                if (errorData.message.includes('unsuccessful')){
+                    // Same thing atm, but can change it easily if different behaviours desired
                     if (errorData.message.includes('username')) {
-                        appendAlert(alertPlaceholder, 'Incorrect username or password. Please try again.', 'warning');
+                        createAlert('Incorrect username or password. Please try again.');
                     } else if (errorData.message.includes('password')) {
-                        appendAlert(alertPlaceholder, 'Incorrect username or password. Please try again.', 'warning');
+                        createAlert('Incorrect username or password. Please try again.');
                     }
                 } else {
                     console.error("Login error: ", errorData.message);
@@ -94,17 +89,18 @@ const LoginForm = () => {
     }
 
     return (
-        <div className="auth-form-container">
+        <div className="auth-form-container py-5">
+            
+            <img className="pb-4" src={logo} alt="My Logo" /> {/* Display the logo image */}
             <form onSubmit={handleLogin}>
-                <div id='liveAlertPlaceholder'></div>
                 <div className='mb-3'>
-                    <label htmlFor='loginUsername' className='form-label'>
+                    {/* <label htmlFor='loginUsername' className='form-label float-start'>
                         Username
-                    </label>
+                    </label> */}
                     <input 
                         type='text'
                         id='loginUsername'
-                        className='form-control'
+                        className='form-control fw-lighter'
                         value={username} 
                         onChange={event => setUsername(event.target.value)}
                         placeholder='Username'
@@ -112,13 +108,13 @@ const LoginForm = () => {
                     />
                 </div>
                 <div className='mb-3'>
-                    <label htmlFor='loginPassword' className='form-label'>
+                    {/* <label htmlFor='loginPassword' className='form-label float-start'>
                         Password
-                    </label>
+                    </label> */}
                     <input 
                         type='password'
                         id='loginPassword'
-                        className='form-control'
+                        className='form-control fw-lighter'
                         value={password}
                         onChange={event => setPassword(event.target.value)}
                         placeholder='Password'
@@ -131,10 +127,19 @@ const LoginForm = () => {
             </form>
 
             <div className='mt-2'>
-                <button id='switchAuthButton' onClick={handleToggleForm} className='btn btn-secondary w-100'>
-                    Switch to Sign Up
+                <button id='switchAuthButton' onClick={handleToggleForm} className='btn btn-link text-dark fw-light' type="button">
+                Don't have an account? Sign Up
                 </button>
             </div>
+
+            {showAlert && (
+                <div className="alert-container">
+                    <div className="alert alert-warning alert-dismissible" role="alert">
+                        {alertMessage}
+                        <button type="button" className="btn-close" onClick={destroyAlert} aria-label="Close"></button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

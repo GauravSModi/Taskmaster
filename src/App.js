@@ -5,13 +5,10 @@ import './App.css';
 
 
 function App() {
-  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    fetch("http://localhost:8009/message")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message));
-  }, []);
+
+//   useEffect(() => {
+//   }, []);
 
   return (
     <div className="App">

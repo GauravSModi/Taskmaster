@@ -21,9 +21,9 @@ const TodoApp = (props) => {
     const token = props.token;
     
     const closeList = () => {
+        setShowModal(false); // Close the modal
         setTitle(null);
         setList(null);
-        setShowModal(false); // Close the modal
     };
 
     const saveChangesList = async () => {
