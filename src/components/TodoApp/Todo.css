@@ -8,3 +8,13 @@
     background-color: #9FA9E1;
     box-shadow: none;
 }
+
+.form-check {
+    width: 100%;
+}
+
+
+.taskDeleteBttn {
+    position: absolute;
+    right: .5rem;
+}

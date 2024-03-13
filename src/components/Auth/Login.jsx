@@ -125,13 +125,13 @@ const LoginForm = () => {
                         maxLength={20}
                     />
                 </div>
-                <div className='mb-2'>
-                    <button type='submit' className='btn btn-primary'>Login</button>
+                <div className='mt-5'>
+                    <button type='submit' className='btn btn-primary w-100' >Login</button>
                 </div>
             </form>
 
-            <div className='mb-2'>
-                <button id='switchAuthButton' onClick={handleToggleForm} className='btn btn-secondary'>
+            <div className='mt-2'>
+                <button id='switchAuthButton' onClick={handleToggleForm} className='btn btn-secondary w-100'>
                     Switch to Sign Up
                 </button>
             </div>
