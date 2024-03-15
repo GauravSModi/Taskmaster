@@ -13,8 +13,20 @@
     width: 100%;
 }
 
-
 .taskDeleteBttn {
     position: absolute;
     right: .5rem;
+}
+
+.text-space {
+    resize: none;
+}
+
+.title {
+    min-height: 2rem;
+    resize: none;
+}
+
+*:focus {
+    outline: none;
 }

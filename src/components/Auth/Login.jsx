@@ -89,9 +89,9 @@ const LoginForm = () => {
     }
 
     return (
-        <div className="auth-form-container py-5">
+        <div className="auth-form-container ">
             
-            <img className="pb-4" src={logo} alt="My Logo" /> {/* Display the logo image */}
+            <img className="pb-5" src={logo} alt="My Logo" /> {/* Display the logo image */}
             <form onSubmit={handleLogin}>
                 <div className='mb-3'>
                     {/* <label htmlFor='loginUsername' className='form-label float-start'>
@@ -105,6 +105,7 @@ const LoginForm = () => {
                         onChange={event => setUsername(event.target.value)}
                         placeholder='Username'
                         maxLength={20}
+                        autoFocus
                     />
                 </div>
                 <div className='mb-3'>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AppSidebar from '../Sidebar/Sidebar';
-import { CloseButton, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import './Todo.css';
 
 const TodoApp = (props) => {
@@ -26,19 +26,30 @@ const TodoApp = (props) => {
         setList(null);
     };
 
-    const saveChangesList = async () => {
-        try {
-            const response = await fetch(url + '/saveChangesList', {
-                method: 'PUT',
-                headers: { 
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({})
-            });
-        } catch (error) {
-            console.error('Error: ', error);
+    // Expands textarea as it fills up
+    const onTextAreaInput = (event) => {
+        const textArea = document.getElementById(event.target.id);
+        textArea.style.height = 'auto';
+        textArea.style.height = `${textArea.scrollHeight}px`;
+    };
+
+    const updateList = async () => {
+        const currTitle = document.getElementById('modalTitleTextArea').value;
+        if (Title !== currTitle) {
+            console.log('Call updateTitle');
         }
+        // try {
+        //     const response = await fetch(url + '/updateList', {
+        //         method: 'PUT',
+        //         headers: { 
+        //             'Authorization': 'Bearer ' + token,
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({})
+        //     });
+        // } catch (error) {
+        //     console.error('Error: ', error);
+        // }
     };
 
     const openList = async (task) => {
@@ -79,7 +90,7 @@ const TodoApp = (props) => {
 
     const getTodoLists = async () => {
         try {
-            const response = await fetch(url + '/todo', {
+            const response = await fetch(url + '/getLists', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token,
@@ -136,54 +147,64 @@ const TodoApp = (props) => {
         <div>
             {/* <AppSidebar/> */}
             <div>
-                {listTitles.map(task => (
-                    <div
-                        key={task.list_id}
-                        id='cards'
-                        className="card shadow-sm p-2 mb-3 rounded"
-                        style={{width: "18rem"}}
-                        onClick={() => openList(task)} >
+                <div>
 
-                        <div className="card-title">{task.title}</div>
-                    </div>
-                ))}
-                
-                {/* Modal Component */}
-                <Modal show={showModal} onHide={closeList}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{List && Title}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {List && (
-                            <div>
-                                {List.map(task => (
-                                    <div 
-                                        key={task[0]}
-                                        className="form-check"
-                                        onMouseEnter={() => handleTaskHover (task[0])}
-                                        onMouseLeave={handleTaskLeave} 
-                                        onFocus={() => handleTaskHover (task[0])}
-                                        onBlur={handleTaskLeave}>
-                                        <input className="form-check-input" type="checkbox" id={task[0]} ></input>
-                                        <label className="form-check-label" htmlFor={task[0]}>
-                                        {task[1]}
-                                        </label>
-                                            {hoveredTask === task[0] && (
-                                                <CloseButton 
-                                                    className='taskDeleteBttn' 
-                                                    onClick={() => handleDeleteTask(task[0])}
-                                                />
-                                            )}
+                    <Modal show={showModal} onHide={closeList} className='note-modal' >
+                        <Modal.Header className='border-0' closeButton>
+                            <textarea id='modalTitleTextArea' className='title overflow-auto mx-2 border-0 rounded fw-light fs-2 w-100' rows={1} placeholder='Title' defaultValue={List && Title} onInput={onTextAreaInput}/>
+                        </Modal.Header>
+                        <Modal.Body className='border-0 mx-2'>
+                            {/* <div className='todo-list'>
+                                {List && (
+                                    <div>
+                                        {List.map(task => (
+                                            <div 
+                                                key={task[0]}
+                                                className="form-check"
+                                                onMouseEnter={() => handleTaskHover (task[0])}
+                                                onMouseLeave={handleTaskLeave} 
+                                                onFocus={() => handleTaskHover (task[0])}
+                                                onBlur={handleTaskLeave}>
+                                                <input className="form-check-input" type="checkbox" id={task[0]} ></input>
+                                                <label className="form-check-label" htmlFor={task[0]}>
+                                                {task[1]}
+                                                </label>
+                                                    {hoveredTask === task[0] && (
+                                                        <CloseButton 
+                                                            className='taskDeleteBttn' 
+                                                            onClick={() => handleDeleteTask(task[0])}
+                                                        />
+                                                    )}
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                )}
+                            </div> */}
+
+                            <textarea id='modalNoteTextArea' className='text-space border border-0 rounded w-100' placeholder='Note' onInput={onTextAreaInput}/>
+                        </Modal.Body>
+                        <Modal.Footer className='border-0'>
+                            <button type="button" className="btn btn-secondary btn" data-bs-dismiss="modal" onClick={closeList}>Cancel</button>
+                            <button type="button" className="btn btn-primary w-25" onClick={updateList}>Save</button>
+                        </Modal.Footer>
+                    </Modal>
+                    <div className='p-5 row '>
+                        
+                        {listTitles.map(task => (
+                            <div
+                                key={task.list_id}
+                                id='cards'
+                                className="card shadow-sm p-4 mx-3 my-4 rounded"
+                                style={{width: "18rem"}}
+                                onClick={() => openList(task)} >
+
+                                <div className="card-title">{task.title}</div>
                             </div>
-                        )}
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <button type="button" className="btn btn-secondary btn" data-bs-dismiss="modal" onClick={closeList}>Cancel</button>
-                        <button type="button" className="btn btn-primary w-25" onClick={saveChangesList}>Save</button>
-                    </Modal.Footer>
-                </Modal>
+                        ))}
+                    </div>
+
+                </div>
+                
             </div>
         </div>
     );
