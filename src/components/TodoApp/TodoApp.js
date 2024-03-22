@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import AppSidebar from '../Sidebar/Sidebar';
-import { Modal } from 'react-bootstrap';
+import { CloseButton, Modal } from 'react-bootstrap';
 import './Todo.css';
 
-const TodoApp = (props) => {
+
+function TodoApp({token}) {
+// const TodoApp = (token) => {
 
     const url = 'http://localhost:8009';
 
-    const [listTitles, setListTitles] = useState([]);
+    const [ListTitles, setListTitles] = useState([]); // State to keep track of the list titles
     const [List, setList] = useState(null); // State to keep track of the list
+    const [ListId, setListId] = useState(null); // State to keep track of the title
     const [Title, setTitle] = useState(null); // State to keep track of the title
     const [showModal, setShowModal] = useState(false); // State to manage modal visibility
     const [hoveredTask, setHoveredTask] = useState(null); // State to keep track of the current hovered task
@@ -18,12 +21,13 @@ const TodoApp = (props) => {
         getTodoLists();
     }, []); // Empty dependency array ensures the effect runs only once
 
-    const token = props.token;
     
     const closeList = () => {
+        console.log('closeList');
         setShowModal(false); // Close the modal
         setTitle(null);
         setList(null);
+        setListId(null);
     };
 
     // Expands textarea as it fills up
@@ -35,25 +39,42 @@ const TodoApp = (props) => {
 
     const updateList = async () => {
         const currTitle = document.getElementById('modalTitleTextArea').value;
+        
+        closeList();
+
         if (Title !== currTitle) {
-            console.log('Call updateTitle');
+            try {
+                const response = await fetch(url + '/updateTitle', {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        'list_id': ListId, 
+                        'title': currTitle 
+                    })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    const listWithNewTitle = ListTitles.find(currList => currList.list_id === ListId);
+                    
+                    if (listWithNewTitle) {
+                        listWithNewTitle.title = currTitle;
+                    }
+                } else {
+
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
         }
-        // try {
-        //     const response = await fetch(url + '/updateList', {
-        //         method: 'PUT',
-        //         headers: { 
-        //             'Authorization': 'Bearer ' + token,
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({})
-        //     });
-        // } catch (error) {
-        //     console.error('Error: ', error);
-        // }
     };
 
+
+
     const openList = async (task) => {
-        const list_id = task.list_id;
+        setListId(task.list_id);
 
         try {
             const response = await fetch(url + '/getList', {
@@ -62,7 +83,7 @@ const TodoApp = (props) => {
                     'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ list_id }),
+                body: JSON.stringify({ 'list_id': task.list_id }),
             });
 
             if (response.ok) { // in the 200 range
@@ -89,6 +110,7 @@ const TodoApp = (props) => {
     };
 
     const getTodoLists = async () => {
+        console.log('getTodoLists');
         try {
             const response = await fetch(url + '/getLists', {
                 method: 'POST',
@@ -110,15 +132,6 @@ const TodoApp = (props) => {
             console.error('Error: ', error);
         }
     };
-
-    const handleTaskHover = (task_id) => {
-        setHoveredTask(task_id);
-    };
-
-    const handleTaskLeave = () => {
-        setHoveredTask(null);
-    };
-
 
     // Delete the task from the list
     const handleDeleteTask = async (task_id) => {
@@ -142,72 +155,81 @@ const TodoApp = (props) => {
         }
     };
 
+    const handleTaskHover = (task_id) => {
+        // console.log('Task hover');
+        setHoveredTask(task_id);
+    };
+
+    const handleTaskLeave = () => {
+        // console.log('Task leave');
+        setHoveredTask(null);
+    };
 
     return (
-        <div>
-            {/* <AppSidebar/> */}
             <div>
+                {/* <AppSidebar/> */}
                 <div>
-
-                    <Modal show={showModal} onHide={closeList} className='note-modal' >
-                        <Modal.Header className='border-0' closeButton>
-                            <textarea id='modalTitleTextArea' className='title overflow-auto mx-2 border-0 rounded fw-light fs-2 w-100' rows={1} placeholder='Title' defaultValue={List && Title} onInput={onTextAreaInput}/>
-                        </Modal.Header>
-                        <Modal.Body className='border-0 mx-2'>
-                            {/* <div className='todo-list'>
-                                {List && (
-                                    <div>
-                                        {List.map(task => (
-                                            <div 
-                                                key={task[0]}
-                                                className="form-check"
-                                                onMouseEnter={() => handleTaskHover (task[0])}
-                                                onMouseLeave={handleTaskLeave} 
-                                                onFocus={() => handleTaskHover (task[0])}
-                                                onBlur={handleTaskLeave}>
-                                                <input className="form-check-input" type="checkbox" id={task[0]} ></input>
-                                                <label className="form-check-label" htmlFor={task[0]}>
-                                                {task[1]}
-                                                </label>
-                                                    {hoveredTask === task[0] && (
-                                                        <CloseButton 
-                                                            className='taskDeleteBttn' 
-                                                            onClick={() => handleDeleteTask(task[0])}
-                                                        />
-                                                    )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div> */}
-
-                            <textarea id='modalNoteTextArea' className='text-space border border-0 rounded w-100' placeholder='Note' onInput={onTextAreaInput}/>
-                        </Modal.Body>
-                        <Modal.Footer className='border-0'>
-                            <button type="button" className="btn btn-secondary btn" data-bs-dismiss="modal" onClick={closeList}>Cancel</button>
-                            <button type="button" className="btn btn-primary w-25" onClick={updateList}>Save</button>
-                        </Modal.Footer>
-                    </Modal>
-                    <div className='p-5 row '>
-                        
-                        {listTitles.map(task => (
-                            <div
-                                key={task.list_id}
-                                id='cards'
-                                className="card shadow-sm p-4 mx-3 my-4 rounded"
-                                style={{width: "18rem"}}
-                                onClick={() => openList(task)} >
-
-                                <div className="card-title">{task.title}</div>
-                            </div>
-                        ))}
+                    <div>
+    
+                        <Modal show={showModal} onHide={closeList} className='note-modal' >
+                            <Modal.Header className='border-0' closeButton>
+                                <textarea id='modalTitleTextArea' className='title overflow-auto mx-2 border-0 rounded fw-light fs-2 w-100' rows={1} placeholder='Title' defaultValue={List && Title} onInput={onTextAreaInput}/>
+                            </Modal.Header>
+                            <Modal.Body className='border-0 mx-2'>
+                                <div className='todo-list'>
+                                    {List && (
+                                        <div>
+                                            {List.map(task => (
+                                                <div 
+                                                    key={task[0]}
+                                                    className="form-check"
+                                                    onMouseEnter={() => handleTaskHover (task[0])}
+                                                    onMouseLeave={handleTaskLeave} 
+                                                    onFocus={() => handleTaskHover (task[0])}
+                                                    onBlur={handleTaskLeave}>
+                                                    <input className="form-check-input" type="checkbox" id={task[0]} ></input>
+                                                    <label className="form-check-label" htmlFor={task[0]}>
+                                                    {task[1]}
+                                                    </label>
+                                                        {hoveredTask === task[0] && (
+                                                            <CloseButton 
+                                                                className='taskDeleteBttn' 
+                                                                onClick={() => handleDeleteTask(task[0])}
+                                                            />
+                                                        )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+    
+                                <textarea id='modalNoteTextArea' className='text-space border border-0 rounded w-100' placeholder='Note' onInput={onTextAreaInput}/>
+                            </Modal.Body>
+                            <Modal.Footer className='border-0'>
+                                <button type="button" className="btn btn-secondary btn" data-bs-dismiss="modal" onClick={closeList}>Cancel</button>
+                                <button type="button" className="btn btn-primary w-25" onClick={updateList}>Save</button>
+                            </Modal.Footer>
+                        </Modal>
+                        <div className='p-5 row '>
+                            
+                            {ListTitles.map(task => (
+                                <div
+                                    key={task.list_id}
+                                    id='cards'
+                                    className="card shadow-sm p-4 mx-3 my-4 rounded"
+                                    style={{width: "18rem"}}
+                                    onClick={() => openList(task)} >
+    
+                                    <div className="card-title">{task.title}</div>
+                                </div>
+                            ))}
+                        </div>
+    
                     </div>
-
+                    
                 </div>
-                
             </div>
-        </div>
-    );
+        );
 };
 
 
