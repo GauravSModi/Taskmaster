@@ -3,6 +3,7 @@ import TodoApp from '../TodoApp/TodoApp';
 import LoginForm from './Login';
 import logo from '../../logo.svg';
 import './Auth.css';
+import { url } from '../../index'
 
 const SignupForm = () => {
     const [username, setUsername] = useState('');
@@ -62,7 +63,7 @@ const SignupForm = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8009/signup', {
+            const response = await fetch(url + '/signup', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',

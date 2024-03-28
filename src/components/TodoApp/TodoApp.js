@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import AppSidebar from '../Sidebar/Sidebar';
-import { CloseButton, Modal } from 'react-bootstrap';
+import AppNavbar from '../Navbar/Navbar';
+import NoteCard from './NoteCard/NoteCard';
+import Notes from './Notes/Notes';
 import './Todo.css';
+import { url } from '../../index'
 
 
 function TodoApp({token}) {
-// const TodoApp = (token) => {
-
-    const url = 'http://localhost:8009';
 
     const [ListTitles, setListTitles] = useState([]); // State to keep track of the list titles
     const [List, setList] = useState(null); // State to keep track of the list
     const [ListId, setListId] = useState(null); // State to keep track of the title
     const [Title, setTitle] = useState(null); // State to keep track of the title
-    const [showModal, setShowModal] = useState(false); // State to manage modal visibility
-    const [hoveredTask, setHoveredTask] = useState(null); // State to keep track of the current hovered task
+    const [ShowModal, setShowModal] = useState(false); // State to manage modal visibility
+    const [NoteType, setNoteType] = useState(true); // true for note, false for list
+    const [IsNewNote, setIsNewNote] = useState(true); // State to manage if making new note vs showing an old one
 
     useEffect(() => {
         // Functions to be called immediately upon component mount
         getTodoLists();
-    }, []); // Empty dependency array ensures the effect runs only once
+    }, []); // Empty dependency array to ensure the effect runs only once
 
     
     const closeList = () => {
@@ -30,51 +31,22 @@ function TodoApp({token}) {
         setListId(null);
     };
 
-    // Expands textarea as it fills up
-    const onTextAreaInput = (event) => {
-        const textArea = document.getElementById(event.target.id);
-        textArea.style.height = 'auto';
-        textArea.style.height = `${textArea.scrollHeight}px`;
-    };
 
-    const updateList = async () => {
-        const currTitle = document.getElementById('modalTitleTextArea').value;
-        
-        closeList();
+    const openCreateNew = () => {
+        console.log("OpenCreateNew")
+    }
 
-        if (Title !== currTitle) {
-            try {
-                const response = await fetch(url + '/updateTitle', {
-                    method: 'POST',
-                    headers: { 
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        'list_id': ListId, 
-                        'title': currTitle 
-                    })
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    const listWithNewTitle = ListTitles.find(currList => currList.list_id === ListId);
-                    
-                    if (listWithNewTitle) {
-                        listWithNewTitle.title = currTitle;
-                    }
-                } else {
-
-                }
-            } catch (error) {
-                console.error('Error: ', error);
-            }
-        }
-    };
-
-
+    // const openNote = async ()
 
     const openList = async (task) => {
+
         setListId(task.list_id);
+
+
+        // if (task.list_id === -1) {
+        //     // setShowModal(true);
+        //     return;
+        // }
 
         try {
             const response = await fetch(url + '/getList', {
@@ -120,8 +92,13 @@ function TodoApp({token}) {
                 },
             });
 
-            if (response.ok) { // in the 200 range
+            if (response.ok) { // in the 200 range)
                 const data = await response.json();
+                if (data.lists === "No Lists Found") {
+                    setListTitles([{list_id: -1}])
+                    console.log("Nope, no lists found");
+                    return;
+                }
                 setListTitles(data.lists);
 
             } else {
@@ -132,6 +109,38 @@ function TodoApp({token}) {
             console.error('Error: ', error);
         }
     };
+
+    const updateTitle = async (newTitle) => {
+
+        if (Title !== newTitle) {
+            try {
+                const response = await fetch(url + '/updateTitle', {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        'list_id': ListId, 
+                        'title': newTitle 
+                    })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    const listWithNewTitle = ListTitles.find(currList => currList.list_id === ListId);
+                    
+                    if (listWithNewTitle) {
+                        listWithNewTitle.title = newTitle;
+                    }
+                } else {
+
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        }
+    };
+
 
     // Delete the task from the list
     const handleDeleteTask = async (task_id) => {
@@ -155,81 +164,29 @@ function TodoApp({token}) {
         }
     };
 
-    const handleTaskHover = (task_id) => {
-        // console.log('Task hover');
-        setHoveredTask(task_id);
-    };
-
-    const handleTaskLeave = () => {
-        // console.log('Task leave');
-        setHoveredTask(null);
-    };
-
     return (
+        <div>
+            {/* <AppSidebar/> */}
+            <AppNavbar/>
             <div>
-                {/* <AppSidebar/> */}
-                <div>
-                    <div>
-    
-                        <Modal show={showModal} onHide={closeList} className='note-modal' >
-                            <Modal.Header className='border-0' closeButton>
-                                <textarea id='modalTitleTextArea' className='title overflow-auto mx-2 border-0 rounded fw-light fs-2 w-100' rows={1} placeholder='Title' defaultValue={List && Title} onInput={onTextAreaInput}/>
-                            </Modal.Header>
-                            <Modal.Body className='border-0 mx-2'>
-                                <div className='todo-list'>
-                                    {List && (
-                                        <div>
-                                            {List.map(task => (
-                                                <div 
-                                                    key={task[0]}
-                                                    className="form-check"
-                                                    onMouseEnter={() => handleTaskHover (task[0])}
-                                                    onMouseLeave={handleTaskLeave} 
-                                                    onFocus={() => handleTaskHover (task[0])}
-                                                    onBlur={handleTaskLeave}>
-                                                    <input className="form-check-input" type="checkbox" id={task[0]} ></input>
-                                                    <label className="form-check-label" htmlFor={task[0]}>
-                                                    {task[1]}
-                                                    </label>
-                                                        {hoveredTask === task[0] && (
-                                                            <CloseButton 
-                                                                className='taskDeleteBttn' 
-                                                                onClick={() => handleDeleteTask(task[0])}
-                                                            />
-                                                        )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-    
-                                <textarea id='modalNoteTextArea' className='text-space border border-0 rounded w-100' placeholder='Note' onInput={onTextAreaInput}/>
-                            </Modal.Body>
-                            <Modal.Footer className='border-0'>
-                                <button type="button" className="btn btn-secondary btn" data-bs-dismiss="modal" onClick={closeList}>Cancel</button>
-                                <button type="button" className="btn btn-primary w-25" onClick={updateList}>Save</button>
-                            </Modal.Footer>
-                        </Modal>
-                        <div className='p-5 row '>
-                            
-                            {ListTitles.map(task => (
-                                <div
-                                    key={task.list_id}
-                                    id='cards'
-                                    className="card shadow-sm p-4 mx-3 my-4 rounded"
-                                    style={{width: "18rem"}}
-                                    onClick={() => openList(task)} >
-    
-                                    <div className="card-title">{task.title}</div>
-                                </div>
-                            ))}
-                        </div>
-    
-                    </div>
-                    
-                </div>
+                <NoteCard
+                    ShowModal={ShowModal}
+                    // isNew={isNew}
+                    // isNote={isNote}
+                    // isList={isList}
+                    handleDeleteTask={handleDeleteTask}
+                    handleClose={closeList}
+                    title={Title}
+                    list={List}
+                    updateList={updateTitle}
+                />
+
+                <Notes listTitles={ListTitles} openList={openList} openCreateNew={openCreateNew} />
+
+
             </div>
-        );
+        </div>
+    );
 };
 
 

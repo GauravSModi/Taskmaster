@@ -1,12 +1,25 @@
 #cards {
     color: white;
-    background-color: #A6B1E1;
+    background-color: #A6B1E1; 
     border: #A6B1E1;
 }
 
 #cards:hover {
     background-color: #9FA9E1;
     box-shadow: none;
+    border: #9FA9E1;
+}
+
+#cards-new {
+    background-color: #A6B1E1; 
+    border: #A6B1E1;
+    color: white;
+}
+
+#cards-new:hover {
+    background-color: #9FA9E1;
+    box-shadow: none;
+    color: white;
 }
 
 .form-check {

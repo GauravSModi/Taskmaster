@@ -2,7 +2,7 @@ import { Sidebar, Menu, MenuItem, SubMenu, menuClasses, sidebarClasses } from 'r
 import './Sidebar.css';
 
 
-const AppSidebar = () => {
+function AppSidebar() {
     return (
         <div className='app-sidebar'
         style={{display: 'flex', height: '100%'}}>
