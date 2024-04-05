@@ -1,5 +1,5 @@
 #create-new>*:hover {
-    fill: #0E70F4;
+    fill: #0a66df;
 }
 
 #create-new>* {
@@ -10,6 +10,36 @@
 #create-new>*:active {
     fill: #2359C3;
 }
+
+
+
+#btn-radio-label:hover {
+    background-color: #0a66df;
+    color: white;
+}
+
+#btn-radio-label {
+    transition: all 0.3s;
+    /* transition: color 1s; */
+}
+
+#btn-radio-label:active {
+    background-color: #2359C3;
+}
+
+/* [id^="btn-radio-label"]:hover {
+    background-color: black;
+} */
+
+/*
+[id^="btn-radio-"]:hover {
+    background-color: black;
+}
+
+[id^="btn-radio-"]:active {
+    background-color: #2359C3;
+} */
+
 
 
 /* #btn-mode-list {

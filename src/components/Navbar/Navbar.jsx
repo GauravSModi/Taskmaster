@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaCirclePlus } from "react-icons/fa6";
 import './Navbar.css';
 
 function AppNavbar({openCreateNew}) {
 
+    const [Mode, setMode] = useState('btn-radio-notes');
+
+    useEffect(() => {
+        showNotesOrLists();
+    }, [Mode]);
+
+    const handleModeChange = (event) => {
+        if (event.target.id !== Mode.id) {
+            setMode(event.target.id);
+        }
+    };
+
+    const showNotesOrLists = () => {
+        if ()
+    };
 
 
     return (
@@ -11,14 +26,38 @@ function AppNavbar({openCreateNew}) {
             <div className="container-fluid">
                 <a className="navbar-brand text-light"></a>
                 <form className="d-flex">
-                    <div className="btn-group btn-group-toggle mx-2 my-3" data-toggle="buttons">
-                        <label className="btn btn-primary" id='btn-mode-note'>
-                            {/* <input type="radio" name="options" id="option1" autoComplete="off" value={"Active"}  defaultChecked/> */}
-                            {"Notes"}
+
+                    <div className='btn-group mx-2 my-2' role='group' aria-label="Basic radio toggle button group" >
+                        <input 
+                            type="radio" 
+                            className="btn-check" 
+                            name="btnradio" 
+                            id="btn-radio-notes" 
+                            autoComplete="off" 
+                            checked={Mode === 'btn-radio-notes'}
+                            onChange={handleModeChange} 
+                            onClick={handleModeChange}/>
+                        <label 
+                            className="btn btn-outline-primary fs-5 px-4" 
+                            htmlFor="btn-radio-notes" 
+                            id="btn-radio-label" >
+                                Notes
                         </label>
-                        <label className="btn btn-secondary active" id='btn-mode-list'>
-                            {"Lists"}
-                            {/* <input type="radio" name="options" id="option2" autoComplete="off" value={"Inactive"} /> */}
+
+                        <input 
+                            type="radio" 
+                            className="btn-check" 
+                            name="btnradio" 
+                            id="btn-radio-lists" 
+                            autoComplete="off" 
+                            checked={Mode === 'btn-radio-notes'}
+                            onChange={handleModeChange}
+                            onClick={handleModeChange}/>
+                        <label 
+                            className="btn btn-outline-primary fs-5 px-4" 
+                            htmlFor="btn-radio-lists" 
+                            id="btn-radio-label">
+                                Lists
                         </label>
                     </div>
 
@@ -27,7 +66,7 @@ function AppNavbar({openCreateNew}) {
                     {/* <button className="btn btn-primary fw-bold fs-3 p-3 lh-1" >Create new</button> */}
                     
                         <button className="btn" type='button' onClick={openCreateNew} id='create-new'> 
-                                <FaCirclePlus color='#337DFF' size='2.5em' title='Create New Note' className='createNewButton'/>
+                                <FaCirclePlus color='#0d6efd' size='2.5em' title='Create New Note' className='createNewButton'/>
                         </button>
                 </form>
             </div>
