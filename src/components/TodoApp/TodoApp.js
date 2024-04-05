@@ -3,32 +3,39 @@ import AppSidebar from '../Sidebar/Sidebar';
 import AppNavbar from '../Navbar/Navbar';
 import NoteCard from './NoteCard/NoteCard';
 import Notes from './Notes/Notes';
-import './Todo.css';
+import './TodoApp.css';
 import { url } from '../../index'
 
 
 function TodoApp({token}) {
 
-    const [ListTitles, setListTitles] = useState([]); // State to keep track of the list titles
-    const [List, setList] = useState(null); // State to keep track of the list
-    const [ListId, setListId] = useState(null); // State to keep track of the title
+    const [ShowNotes, setShowNotes] = useState(0); // 0 = show notes, 1 = show lists
+    const [NoteTitles, setNoteTitles] = useState([]); // State to keep track of the note titles
+    const [Note, setNote] = useState(null); // State to keep track of the note
+    const [List, setList] = useState(null); // State to keep track of the note
+    const [NoteId, setNoteId] = useState(null); // State to keep track of the title
     const [Title, setTitle] = useState(null); // State to keep track of the title
     const [ShowModal, setShowModal] = useState(false); // State to manage modal visibility
-    const [NoteType, setNoteType] = useState(true); // true for note, false for list
+    const [NoteType, setNoteType] = useState(true); // true for note, false for note
     const [IsNewNote, setIsNewNote] = useState(true); // State to manage if making new note vs showing an old one
 
     useEffect(() => {
         // Functions to be called immediately upon component mount
-        getTodoLists();
+        console.log('getNotes');
+        getNotes();
     }, []); // Empty dependency array to ensure the effect runs only once
 
+
+
+
     
-    const closeList = () => {
-        console.log('closeList');
+    const closeNote = () => {
+        console.log('closeNote');
+        setNoteTitles([...NoteTitles]);
         setShowModal(false); // Close the modal
         setTitle(null);
-        setList(null);
-        setListId(null);
+        setNote(null);
+        setNoteId(null);
     };
 
 
@@ -36,17 +43,9 @@ function TodoApp({token}) {
         console.log("OpenCreateNew")
     }
 
-    // const openNote = async ()
-
     const openList = async (task) => {
 
-        setListId(task.list_id);
-
-
-        // if (task.list_id === -1) {
-        //     // setShowModal(true);
-        //     return;
-        // }
+        setNoteId(task.note_id);
 
         try {
             const response = await fetch(url + '/getList', {
@@ -81,10 +80,10 @@ function TodoApp({token}) {
         };
     };
 
-    const getTodoLists = async () => {
-        console.log('getTodoLists');
+    // Retreive all notes/lists associated with the user
+    const getNotes = async () => {
         try {
-            const response = await fetch(url + '/getLists', {
+            const response = await fetch(url + '/getNotes', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token,
@@ -94,12 +93,14 @@ function TodoApp({token}) {
 
             if (response.ok) { // in the 200 range)
                 const data = await response.json();
-                if (data.lists === "No Lists Found") {
-                    setListTitles([{list_id: -1}])
-                    console.log("Nope, no lists found");
+
+                if (data.notes === "No Notes Found") {
+                    // setNoteTitles([{note_id: -1}])
+                    console.log("Nope, no notes found");
                     return;
+                } else{
+                    setNoteTitles(data.notes);
                 }
-                setListTitles(data.lists);
 
             } else {
                 const errorData = await response.json();
@@ -110,6 +111,8 @@ function TodoApp({token}) {
         }
     };
 
+
+    // Update Note/List title if it has changed
     const updateTitle = async (newTitle) => {
 
         if (Title !== newTitle) {
@@ -121,17 +124,18 @@ function TodoApp({token}) {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ 
-                        'list_id': ListId, 
+                        'note_id': NoteId, 
                         'title': newTitle 
                     })
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    const listWithNewTitle = ListTitles.find(currList => currList.list_id === ListId);
+                    const noteWithNewTitle = NoteTitles.find(currNote => currNote.note_id === NoteId);
                     
-                    if (listWithNewTitle) {
-                        listWithNewTitle.title = newTitle;
+                    if (noteWithNewTitle) {
+                        noteWithNewTitle.title = newTitle;
                     }
+                    setNoteTitles([...NoteTitles]);
                 } else {
 
                 }
@@ -165,23 +169,25 @@ function TodoApp({token}) {
     };
 
     return (
-        <div>
+        <div className='todo-app '>
             {/* <AppSidebar/> */}
-            <AppNavbar/>
+            <div>
+                <AppNavbar openCreateNew={openCreateNew}/>
+            </div>
             <div>
                 <NoteCard
                     ShowModal={ShowModal}
                     // isNew={isNew}
                     // isNote={isNote}
-                    // isList={isList}
                     handleDeleteTask={handleDeleteTask}
-                    handleClose={closeList}
+                    handleClose={closeNote}
                     title={Title}
                     list={List}
-                    updateList={updateTitle}
+                    note={Note}
+                    updateNote={updateTitle}
                 />
 
-                <Notes listTitles={ListTitles} openList={openList} openCreateNew={openCreateNew} />
+                <Notes noteTitles={NoteTitles} openList={openList}/>
 
 
             </div>

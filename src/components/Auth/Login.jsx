@@ -82,7 +82,7 @@ const LoginForm = () => {
     if (loginSuccess) {
         console.log(token);
 
-        if (token != null) return <TodoApp token={token}/>;
+        if (token != null) return <TodoApp token={token} className='w-100'/>;
     }
 
     if (isSignup) {

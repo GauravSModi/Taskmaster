@@ -1,0 +1,19 @@
+#create-new>*:hover {
+    fill: #0E70F4;
+}
+
+#create-new>* {
+    transition: fill 0.3s;
+}
+
+
+#create-new>*:active {
+    fill: #2359C3;
+}
+
+
+/* #btn-mode-list {
+    background-color: #0E70F4;
+    border-color: #0E70F4;
+} */
+

@@ -1,26 +1,45 @@
-#cards {
-    color: white;
+/* [id^="card-"] {
     background-color: #A6B1E1; 
+    color: white;
     border: #A6B1E1;
 }
 
-#cards:hover {
+[id^="card-"]:hover {
+    background-color: #9FA9E1;
+    box-shadow: none;
+    border: #9FA9E1;
+} */
+
+.todo-app {
+    min-width: 100vw;
+    justify-content: center;
+}
+
+.notes-grid {
+    justify-content: center;
+}
+
+.card {
+    background-color: #A6D7C9; 
+    color: black;
+    /* color: white; */
+    border: #A6B1E1;
+}
+
+.card:hover {
     background-color: #9FA9E1;
     box-shadow: none;
     border: #9FA9E1;
 }
+/* 
+#close-button>* {
 
-#cards-new {
-    background-color: #A6B1E1; 
-    border: #A6B1E1;
-    color: white;
 }
 
-#cards-new:hover {
-    background-color: #9FA9E1;
-    box-shadow: none;
-    color: white;
-}
+#close-button>*:hover {
+    fill: #000000;
+
+} */
 
 .form-check {
     width: 100%;

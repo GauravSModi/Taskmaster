@@ -1,10 +1,19 @@
 /* Responsible for creating, or showing an existing, single note or list using a bootstrap modal */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, CloseButton } from 'react-bootstrap';
+import { IoCloseCircle } from "react-icons/io5";
 
 function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, list, updateList }) {
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [HoveredTask, setHoveredTask] = useState(null);
+
+
+    // Resize Title text area height when modal is activated
+    useEffect(() => {
+        if (ShowModal) {
+            resizeTextAreaInput();
+        }
+    }, [ShowModal]);
 
     const handleTaskHover = (task_id) => {
         setHoveredTask(task_id);
@@ -14,8 +23,8 @@ function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, list, updat
         setHoveredTask(null);
     };
 
-    const onTextAreaInput = (event) => {
-        const textArea = event.target;
+    const resizeTextAreaInput = () => {
+        const textArea = document.getElementById('modalTitleTextArea');
         textArea.style.height = 'auto';
         textArea.style.height = `${textArea.scrollHeight}px`;
         setTextAreaHeight(`${textArea.scrollHeight}px`);
@@ -29,8 +38,6 @@ function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, list, updat
             updateList(newTitle);
         }
 
-        
-
         // Close modal window
         handleClose();
     }
@@ -38,16 +45,17 @@ function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, list, updat
 
     return (
         <Modal show={ShowModal} onHide={handleClose} className='note-modal'>
-            <Modal.Header className='border-0 pb-0 '>
+            <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={handleClose}><IoCloseCircle color='#337DFF' size='2.5em' /></button>
+            <Modal.Header className='border-0 pb-0 me-4'>
                 <textarea
-                    className='title overflow-auto mx-2 border-0 rounded fw-light fs-2 w-100'
+                    className='title overflow-auto mx-2 border-0 rounded fw-light fs-3 w-100'
                     id='modalTitleTextArea'
                     rows={1}
                     placeholder='Title'
                     defaultValue={title}
-                    onInput={onTextAreaInput}
+                    onInput={resizeTextAreaInput}
                 />
-                <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>
+                {/* <button type="button" className="btn-close position-absolute top-0 end-0" aria-label="Close" onClick={handleClose}></button> */}
             </Modal.Header>
     
             <Modal.Body className='border-0 mx-2'>
@@ -78,7 +86,8 @@ function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, list, updat
                         </div>
                     )}
                 </div>
-                <textarea id='modalNoteTextArea' className='text-space border border-0 rounded w-100' placeholder='Note' onInput={onTextAreaInput} />
+                <textarea id='modalNoteTextArea' className='text-space border border-0 rounded w-100' placeholder='Note' onInput={resizeTextAreaInput} />
+                {/* <p className='text-danger'>Title cannot exceed 100 characters</p> */}
             </Modal.Body>
             <Modal.Footer className='border-0'>
                 <button type="button" className="btn btn-secondary btn" onClick={handleClose}>Cancel</button>

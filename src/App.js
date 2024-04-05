@@ -5,14 +5,8 @@ import './App.css';
 
 
 function App() {
-
-
-//   useEffect(() => {
-//   }, []);
-
   return (
     <div className="App">
-      {/* <h1>{message}</h1> */}
       <LoginForm />
     </div>
   );
