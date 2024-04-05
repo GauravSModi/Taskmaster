@@ -7,17 +7,18 @@ function AppNavbar({openCreateNew}) {
     const [Mode, setMode] = useState('btn-radio-notes');
 
     useEffect(() => {
+        console.log("Mode: ", Mode);
         showNotesOrLists();
     }, [Mode]);
 
     const handleModeChange = (event) => {
-        if (event.target.id !== Mode.id) {
+        if (event.target.id != Mode) {
             setMode(event.target.id);
         }
     };
 
     const showNotesOrLists = () => {
-        if ()
+    //     if ()
     };
 
 
@@ -50,7 +51,7 @@ function AppNavbar({openCreateNew}) {
                             name="btnradio" 
                             id="btn-radio-lists" 
                             autoComplete="off" 
-                            checked={Mode === 'btn-radio-notes'}
+                            checked={Mode === 'btn-radio-lists'}
                             onChange={handleModeChange}
                             onClick={handleModeChange}/>
                         <label 
