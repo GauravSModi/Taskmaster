@@ -48,13 +48,13 @@ function TodoApp({token}) {
         setNoteId(task.note_id);
 
         try {
-            const response = await fetch(url + '/getList', {
+            const response = await fetch(url + '/getTasks', {
                 method: 'POST',
                 headers: { 
                     'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 'list_id': task.list_id }),
+                body: JSON.stringify({ 'note_id': task.note_id }),
             });
 
             if (response.ok) { // in the 200 range
@@ -169,12 +169,12 @@ function TodoApp({token}) {
     };
 
     return (
-        <div className='todo-app '>
+        <div className='todo-app'>
             {/* <AppSidebar/> */}
             <div>
                 <AppNavbar openCreateNew={openCreateNew}/>
             </div>
-            <div>
+            <div className='mt-4'>
                 <NoteCard
                     ShowModal={ShowModal}
                     // isNew={isNew}

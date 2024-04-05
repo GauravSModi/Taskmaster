@@ -9,21 +9,21 @@ function Notes({ noteTitles, openList }) {
     // Adjust card height every time listTitles changes
     useEffect(() => {
         checkEmptyNotes();
-        // adjustCardHeight();
-        // window.addEventListener('resize', adjustCardHeight);
-        // return () => {
-        //     window.removeEventListener('resize', adjustCardHeight);
-        // };
+        adjustCardHeight();
+        window.addEventListener('resize', adjustCardHeight);
+        return () => {
+            window.removeEventListener('resize', adjustCardHeight);
+        };
     }, [noteTitles]);
 
     // Adjust card height on launch
     useEffect(() => {
         checkEmptyNotes();
-        // adjustCardHeight();
-        // window.addEventListener('resize', adjustCardHeight);
-        // return () => {
-        //     window.removeEventListener('resize', adjustCardHeight);
-        // };
+        adjustCardHeight();
+        window.addEventListener('resize', adjustCardHeight);
+        return () => {
+            window.removeEventListener('resize', adjustCardHeight);
+        };
     }, []);
 
     // Add a create not note if user doesn't have any notes
@@ -34,20 +34,20 @@ function Notes({ noteTitles, openList }) {
         }
     };
 
-    // // Adjust card height depending on note title length
-    // const adjustCardHeight = () => {
-    //     noteTitles.forEach(task => {
-    //         const card = document.getElementById(`card-${task.note_id}`);
-    //         const title = document.getElementById(`title-${task.note_id}`);
-    //         if (card && title) {
-    //             const lines = title.offsetHeight / parseInt(window.getComputedStyle(title).lineHeight);
-    //             card.style.height = `${(lines * 1.5) + 2}em`; 
-    //         }
-    //     });
-    // };
+    // Adjust card height depending on note title length
+    const adjustCardHeight = () => {
+        noteTitles.forEach(task => {
+            const card = document.getElementById(`card-${task.note_id}`);
+            const title = document.getElementById(`title-${task.note_id}`);
+            if (card && title) {
+                const lines = title.offsetHeight / parseInt(window.getComputedStyle(title).lineHeight);
+                card.style.height = `${(lines * 1.5) + 2}em`; 
+            }
+        });
+    };
 
     return (
-        <div className='notes-grid p-5 row mx-auto'>
+        <div className='notes-grid mt-5 p-5 row mx-auto'>
             {noteTitles.length > 0 && noteTitles.map(task => (
                 <div
                     key={task.note_id}
