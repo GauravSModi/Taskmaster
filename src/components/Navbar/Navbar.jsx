@@ -2,23 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { FaCirclePlus } from "react-icons/fa6";
 import './Navbar.css';
 
-function AppNavbar({openCreateNew}) {
-
-    const [Mode, setMode] = useState('btn-radio-notes');
-
-    useEffect(() => {
-        console.log("Mode: ", Mode);
-        showNotesOrLists();
-    }, [Mode]);
+function AppNavbar({openCreateNew, Mode, setMode}) {
 
     const handleModeChange = (event) => {
         if (event.target.id != Mode) {
             setMode(event.target.id);
         }
-    };
-
-    const showNotesOrLists = () => {
-    //     if ()
     };
 
 

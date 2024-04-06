@@ -14,16 +14,17 @@
 
 
 #btn-radio-label:hover {
+    border-color: #0a66df;
     background-color: #0a66df;
     color: white;
 }
 
 #btn-radio-label {
     transition: all 0.3s;
-    /* transition: color 1s; */
 }
 
 #btn-radio-label:active {
+    border-color: #2359C3;
     background-color: #2359C3;
 }
 

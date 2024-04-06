@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import '../TodoApp.css';
 
 
-function Notes({ noteTitles, openList }) {
+function Notes({ VisibleNotes, openList, Mode }) {
     const titleRef = useRef(null);
 
     // Adjust card height every time listTitles changes
@@ -14,7 +14,7 @@ function Notes({ noteTitles, openList }) {
         return () => {
             window.removeEventListener('resize', adjustCardHeight);
         };
-    }, [noteTitles]);
+    }, [VisibleNotes]);
 
     // Adjust card height on launch
     useEffect(() => {
@@ -28,15 +28,15 @@ function Notes({ noteTitles, openList }) {
 
     // Add a create not note if user doesn't have any notes
     const checkEmptyNotes = () => {
-        console.log(noteTitles.length);
-        if (noteTitles.length === 0) {
+        console.log(VisibleNotes.length);
+        if (VisibleNotes.length === 0) {
             
         }
     };
 
     // Adjust card height depending on note title length
     const adjustCardHeight = () => {
-        noteTitles.forEach(task => {
+        VisibleNotes.forEach(task => {
             const card = document.getElementById(`card-${task.note_id}`);
             const title = document.getElementById(`title-${task.note_id}`);
             if (card && title) {
@@ -48,7 +48,7 @@ function Notes({ noteTitles, openList }) {
 
     return (
         <div className='notes-grid mt-5 p-5 row mx-auto'>
-            {noteTitles.length > 0 && noteTitles.map(task => (
+            {VisibleNotes.length > 0 && VisibleNotes.map(task => (
                 <div
                     key={task.note_id}
                     id={`card-${task.note_id}`}
@@ -59,7 +59,7 @@ function Notes({ noteTitles, openList }) {
                 </div>
             ))}
 
-            {noteTitles.length === 0 && 
+            {VisibleNotes.length === 0 && 
                 <div className='w-100'> 
                     <p className='text-center text-muted'>Empty</p>
                 </div>

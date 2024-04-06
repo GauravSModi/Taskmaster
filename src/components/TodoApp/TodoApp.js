@@ -9,29 +9,69 @@ import { url } from '../../index'
 
 function TodoApp({token}) {
 
-    const [ShowNotes, setShowNotes] = useState(0); // 0 = show notes, 1 = show lists
-    const [NoteTitles, setNoteTitles] = useState([]); // State to keep track of the note titles
+    const [Mode, setMode] = useState('btn-radio-notes'); // State to manage which type of notes is visible
+    const [NoteType, setNoteType] = useState(0); // State to manage which type of notes is visible
+    const [AllNotes, setAllNotes] = useState([]); // State to keep track of all notes assocciated with the user
+    const [VisibleNotes, setVisibleNotes] = useState([]); // State to keep track of the visible notes
     const [Note, setNote] = useState(null); // State to keep track of the note
-    const [List, setList] = useState(null); // State to keep track of the note
+    const [List, setList] = useState(null); // State to keep track of the list
     const [NoteId, setNoteId] = useState(null); // State to keep track of the title
     const [Title, setTitle] = useState(null); // State to keep track of the title
     const [ShowModal, setShowModal] = useState(false); // State to manage modal visibility
-    const [NoteType, setNoteType] = useState(true); // true for note, false for note
     const [IsNewNote, setIsNewNote] = useState(true); // State to manage if making new note vs showing an old one
+
+    // Used to help switch visible notes
+    const Modes = {
+        note: 'btn-radio-notes',
+        list: 'btn-radio-lists'
+    }
+
+    // Used to distinguish between which type a specific note is
+    const Types = {
+        note: 0,
+        list: 1
+    }
 
     useEffect(() => {
         // Functions to be called immediately upon component mount
-        console.log('getNotes');
         getNotes();
     }, []); // Empty dependency array to ensure the effect runs only once
 
+    useEffect(() => {
+        changeMode();
+    }, [Mode]);
 
+    useEffect(() => {
+        changeVisible();
+    }, [NoteType]);
 
+    useEffect(() => {
+        changeVisible();
+    }, [AllNotes]);
 
+    const changeVisible = () => {
+        setVisibleNotes(AllNotes.filter((curr) => {
+            return curr.is_note === NoteType;
+        }))
+    };
+
+    const changeMode = () => {
+        switch(Mode) {
+            case Modes.note:
+                console.log("Setting mode: ", Types.note);
+                setNoteType(Types.note);
+                break;
+            
+            case Modes.list:
+                console.log("Setting mode: ", Types.list);
+                setNoteType(Types.list);
+                break;
+        }
+    };
     
     const closeNote = () => {
         console.log('closeNote');
-        setNoteTitles([...NoteTitles]);
+        setAllNotes([...AllNotes]);
         setShowModal(false); // Close the modal
         setTitle(null);
         setNote(null);
@@ -95,11 +135,11 @@ function TodoApp({token}) {
                 const data = await response.json();
 
                 if (data.notes === "No Notes Found") {
-                    // setNoteTitles([{note_id: -1}])
+                    // setAllNotes([{note_id: -1}])
                     console.log("Nope, no notes found");
                     return;
                 } else{
-                    setNoteTitles(data.notes);
+                    setAllNotes(data.notes);
                 }
 
             } else {
@@ -130,12 +170,12 @@ function TodoApp({token}) {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    const noteWithNewTitle = NoteTitles.find(currNote => currNote.note_id === NoteId);
+                    const noteWithNewTitle = AllNotes.find(currNote => currNote.note_id === NoteId);
                     
                     if (noteWithNewTitle) {
                         noteWithNewTitle.title = newTitle;
                     }
-                    setNoteTitles([...NoteTitles]);
+                    setAllNotes([...AllNotes]);
                 } else {
 
                 }
@@ -172,7 +212,7 @@ function TodoApp({token}) {
         <div className='todo-app'>
             {/* <AppSidebar/> */}
             <div>
-                <AppNavbar openCreateNew={openCreateNew}/>
+                <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} />
             </div>
             <div className='mt-4'>
                 <NoteCard
@@ -187,7 +227,7 @@ function TodoApp({token}) {
                     updateNote={updateTitle}
                 />
 
-                <Notes noteTitles={NoteTitles} openList={openList}/>
+                <Notes VisibleNotes={VisibleNotes} openList={openList} Mode={Mode} />
 
 
             </div>

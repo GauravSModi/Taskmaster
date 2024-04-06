@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, CloseButton } from 'react-bootstrap';
 import { IoCloseCircle } from "react-icons/io5";
 
-function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, list, updateList }) {
+function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, list, updateNote }) {
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [HoveredTask, setHoveredTask] = useState(null);
 
@@ -35,7 +35,7 @@ function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, list, updat
 
         // Update the title if it has changed
         if (newTitle !== title) {
-            updateList(newTitle);
+            updateNote(newTitle);
         }
 
         // Close modal window
