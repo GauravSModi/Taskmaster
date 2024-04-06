@@ -11,19 +11,23 @@
 } */
 
 .todo-app {
+    /* display: position; */
+    flex-direction: column;
+    height: 100vw;
     min-width: 100vw;
     justify-content: center;
 }
 
-.notes-grid {
-    justify-content: center;
+.note-card-grid {
+    /* justify-content: center; */
 }
 
 .card {
-    background-color: #A6D7C9; 
+    /* background-color: #A6D7C9;  */
     color: black;
     /* color: white; */
     border: #A6B1E1;
+    transition: all 0.2s;
 }
 
 .card:hover {

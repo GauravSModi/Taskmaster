@@ -58,19 +58,19 @@ function TodoApp({token}) {
     const changeMode = () => {
         switch(Mode) {
             case Modes.note:
-                console.log("Setting mode: ", Types.note);
+                // console.log("Setting mode: ", Types.note);
                 setNoteType(Types.note);
                 break;
             
             case Modes.list:
-                console.log("Setting mode: ", Types.list);
+                // console.log("Setting mode: ", Types.list);
                 setNoteType(Types.list);
                 break;
         }
     };
     
     const closeNote = () => {
-        console.log('closeNote');
+        // console.log('closeNote');
         setAllNotes([...AllNotes]);
         setShowModal(false); // Close the modal
         setTitle(null);
@@ -214,7 +214,6 @@ function TodoApp({token}) {
             <div>
                 <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} />
             </div>
-            <div className='mt-4'>
                 <NoteCard
                     ShowModal={ShowModal}
                     // isNew={isNew}
@@ -228,9 +227,6 @@ function TodoApp({token}) {
                 />
 
                 <Notes VisibleNotes={VisibleNotes} openList={openList} Mode={Mode} />
-
-
-            </div>
         </div>
     );
 };
