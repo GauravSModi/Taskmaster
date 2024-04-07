@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../TodoApp.css';
 
 
-function Notes({ VisibleNotes, openList, Mode }) {
+function Notes({ VisibleNotes, openNote, Mode }) {
     const titleRef = useRef(null);
 
     // const [numCols, setNumCols] = useState(0); // TODO: Use for organizing cards
@@ -76,7 +76,7 @@ function Notes({ VisibleNotes, openList, Mode }) {
                             id={`card-${task.note_id}`}
                             className="card shadow-sm p-3 mx-3 my-4 rounded bg-secondary text-white"
                             style={{ width: "12rem" }}
-                            onClick={() => openList(task)} >
+                            onClick={() => openNote(task)} >
                             <div className="card-title" id={`title-${task.note_id}`} ref={titleRef}>{task.title}</div>
                         </div>
                     ))}
