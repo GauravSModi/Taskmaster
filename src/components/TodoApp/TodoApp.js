@@ -83,13 +83,13 @@ function TodoApp({token}) {
         console.log("OpenCreateNew")
     }
 
-    const openNote = (task) => {
-        setNoteId(task.note_id);
+    const openNote = (note) => {
+        setNoteId(note.note_id);
 
-        if (task.is_note == Types.note) {
-            getMessage(task);
-        } else if (task.is_note == Types.list) {
-            getTasks(task);
+        if (note.is_note == Types.note) {
+            getMessage(note);
+        } else if (note.is_note == Types.list) {
+            getTasks(note);
         }
 
     };
@@ -226,9 +226,42 @@ function TodoApp({token}) {
         }
     };
 
+    // Delete note
+    const deleteNote = async (note_id) => {
+        try {
+            const response = await fetch(url + '/deleteNote', {
+                method: 'DELETE',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+                body: JSON.stringify({ note_id }),
+            })
+            if (response.ok) {
+                closeNote();
+
+                setAllNotes( AllNotes.filter((note) => {
+                    console.log(note.note_id, " : ", note_id);
+                    return note.note_id != note_id;
+                }))
+                
+                // Delete the note from view
+                // setVisibleNotes( VisibleNotes.filter((note) => {
+                //     console.log(note.note_id, " : ", note_id);
+                //     return note.note_id != note_id;
+                // }))
+
+            } else {
+
+            }
+        } catch (error) {
+            console.error('Error: ', error);
+        }
+    };
+
 
     // Delete the task from the list
-    const handleDeleteTask = async (task_id) => {
+    const deleteTask = async (task_id) => {
 
         // Delete the task from the front-end
         setTasks( Tasks.filter((element) => {
@@ -236,7 +269,7 @@ function TodoApp({token}) {
         }))
 
         try {
-            await fetch(url + '/deleteTask', {
+           const response = await fetch(url + '/deleteTask', {
                 method: 'DELETE',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -244,6 +277,11 @@ function TodoApp({token}) {
                 },
                 body: JSON.stringify({ task_id }),
             })
+            if (response.ok) {
+
+            } else {
+
+            }
         } catch (error) {
             console.error('Error: ', error);
         }
@@ -256,15 +294,17 @@ function TodoApp({token}) {
                 <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} />
             </div>
                 <NoteCard
-                    ShowModal={ShowModal}
+                    showModal={ShowModal}
+                    noteId={NoteId}
                     // isNew={isNew}
-                    handleDeleteTask={handleDeleteTask}
-                    handleClose={closeNote}
                     title={Title}
                     noteType={NoteType}
                     list={Tasks}
                     message={Message}
                     updateNote={updateTitle}
+                    handleDeleteTask={deleteTask}
+                    handleDeleteNote={deleteNote}
+                    handleClose={closeNote}
                 />
 
                 <Notes VisibleNotes={VisibleNotes} openNote={openNote} Mode={Mode} />

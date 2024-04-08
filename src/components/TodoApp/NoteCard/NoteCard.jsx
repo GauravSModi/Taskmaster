@@ -3,17 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { Modal, CloseButton } from 'react-bootstrap';
 import { IoCloseCircle } from "react-icons/io5";
 
-function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, noteType, list, message, updateNote }) {
+function NoteCard({ showModal, noteId, title, noteType, list, message, updateNote, handleDeleteTask, handleDeleteNote, handleClose }) {
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [HoveredTask, setHoveredTask] = useState(null);
 
 
     // Resize Title text area height when modal is activated
     useEffect(() => {
-        if (ShowModal) {
+        if (showModal) {
             resizeTextAreaInput();
         }
-    }, [ShowModal]);
+    }, [showModal]);
 
     const handleTaskHover = (task_id) => {
         setHoveredTask(task_id);
@@ -44,7 +44,7 @@ function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, noteType, l
 
 
     return (
-        <Modal show={ShowModal} onHide={handleClose} className='note-modal'>
+        <Modal show={showModal} onHide={handleClose} className='note-modal'>
             <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={handleClose}><IoCloseCircle color='#0d6efd' size='2.5em' /></button>
             <Modal.Header className='border-0 pb-0 me-4'>
                 <textarea
@@ -97,9 +97,14 @@ function NoteCard({ ShowModal, handleDeleteTask, handleClose, title, noteType, l
                 }
                 {/* <p className='text-danger'>Title cannot exceed 100 characters</p> */}
             </Modal.Body>
-            <Modal.Footer className='border-0'>
-                <button type="button" className="btn btn-secondary btn" onClick={handleClose}>Cancel</button>
-                <button type="button" className="btn btn-primary w-25" onClick={updateHelper}>Save</button>
+            <Modal.Footer className='border-0 d-flex justify-content-between'>
+                <button type='button' className='btn btn-danger px-3' onClick={() => handleDeleteNote(noteId)}>Delete</button>
+
+                <div>
+                    <button type="button" className="btn btn-secondary" onClick={handleClose}>Cancel</button>
+                    <button type="button" className="btn btn-primary ms-2" style={{paddingLeft:'2.5rem', paddingRight:'2.5rem'}} onClick={updateHelper}>Save</button>
+                </div>
+
             </Modal.Footer>
         </Modal>
     );

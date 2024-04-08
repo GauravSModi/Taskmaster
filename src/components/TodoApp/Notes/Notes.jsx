@@ -12,8 +12,10 @@ function Notes({ VisibleNotes, openNote, Mode }) {
         window.addEventListener("resize", organizeCards)
     };
 
-    // Adjust card height every time listTitles changes
+    // Adjust card height every time VisibleNotes changes
     useEffect(() => {
+        console.log("Visible notes changed");
+        console.log(VisibleNotes);
         organizeCards();
         checkEmptyNotes();
         adjustCardHeight();
@@ -74,7 +76,7 @@ function Notes({ VisibleNotes, openNote, Mode }) {
                         <div
                             key={task.note_id}
                             id={`card-${task.note_id}`}
-                            className="card shadow-sm p-3 mx-3 my-4 rounded bg-secondary text-white"
+                            className="card p-3 mx-3 my-4 rounded bg-secondary text-white"
                             style={{ width: "12rem" }}
                             onClick={() => openNote(task)} >
                             <div className="card-title" id={`title-${task.note_id}`} ref={titleRef}>{task.title}</div>
