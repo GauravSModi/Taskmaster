@@ -58,19 +58,16 @@ function TodoApp({token}) {
     const changeMode = () => {
         switch(Mode) {
             case Modes.note:
-                // console.log("Setting mode: ", Types.note);
                 setNoteType(Types.note);
                 break;
             
             case Modes.list:
-                // console.log("Setting mode: ", Types.list);
                 setNoteType(Types.list);
                 break;
         }
     };
     
     const closeNote = () => {
-        // console.log('closeNote');
         setAllNotes([...AllNotes]);
         setShowModal(false); // Close the modal
         setTitle(null);
@@ -85,13 +82,11 @@ function TodoApp({token}) {
 
     const openNote = (note) => {
         setNoteId(note.note_id);
-
         if (note.is_note == Types.note) {
             getMessage(note);
         } else if (note.is_note == Types.list) {
             getTasks(note);
         }
-
     };
 
     const getMessage = async (task) => {
@@ -107,14 +102,12 @@ function TodoApp({token}) {
 
             if (response.ok) { // in the 200 range
                 const data = await response.json();
-                let message = null; // Holds note message
-                console.log(data.message)
-                if (!data.message.message.includes('No message Found')){
-                    message = data.message;
+                if (!data.message.includes('No message found')){
+                    setMessage(data.message);
+                } else {
+                    setMessage('');
                 }
-
                 setTitle(task.title);
-                setMessage(message);
                 setShowModal(true); // Open the modal
             } else {
                 const errorData = await response.json();
@@ -142,8 +135,7 @@ function TodoApp({token}) {
                 const data = await response.json();
                 let task_list = []; // Holds descriptions of tasks
 
-                if (!data.tasks.includes('No tasks Found')){
-                    console.log(data.tasks)
+                if (!data.tasks.includes('No tasks found')){
                     task_list = data.tasks.map(task => {
                         return [task.task_id, task.description, task.is_completed];
                     })
@@ -193,6 +185,12 @@ function TodoApp({token}) {
     };
 
 
+    const updateNote = () => {
+        // updateTitle();
+
+        // if 
+    }
+
     // Update note/list title if it has changed
     const updateTitle = async (newTitle) => {
 
@@ -241,15 +239,8 @@ function TodoApp({token}) {
                 closeNote();
 
                 setAllNotes( AllNotes.filter((note) => {
-                    console.log(note.note_id, " : ", note_id);
                     return note.note_id != note_id;
                 }))
-                
-                // Delete the note from view
-                // setVisibleNotes( VisibleNotes.filter((note) => {
-                //     console.log(note.note_id, " : ", note_id);
-                //     return note.note_id != note_id;
-                // }))
 
             } else {
 

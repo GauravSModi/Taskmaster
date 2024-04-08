@@ -14,8 +14,6 @@ function Notes({ VisibleNotes, openNote, Mode }) {
 
     // Adjust card height every time VisibleNotes changes
     useEffect(() => {
-        console.log("Visible notes changed");
-        console.log(VisibleNotes);
         organizeCards();
         checkEmptyNotes();
         adjustCardHeight();

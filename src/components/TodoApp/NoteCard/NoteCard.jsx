@@ -86,13 +86,13 @@ function NoteCard({ showModal, noteId, title, noteType, list, message, updateNot
                             </div>
                     </div>
                 }
-                {message && 
+                {message != null && 
                     <textarea 
                         id='modalNoteTextArea' 
                         className='text-space border border-0 rounded w-100' 
                         placeholder='Note'
                         // value={message.message}
-                        defaultValue={message.message}
+                        defaultValue={message}
                         onInput={resizeTextAreaInput} />
                 }
                 {/* <p className='text-danger'>Title cannot exceed 100 characters</p> */}
