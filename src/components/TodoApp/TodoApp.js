@@ -185,15 +185,16 @@ function TodoApp({token}) {
     };
 
 
-    const updateNote = () => {
-        // updateTitle();
+    const updateNote = (noteType, noteContent) => {
+        // if (noteType == Types.note) {
+        //     updateMessage(noteContent);
+        // } else if (noteType == Types.list){
+        //     updateList(noteContent);
+        // }
+    };
 
-        // if 
-    }
-
-    // Update note/list title if it has changed
+    // Update note title if it has changed
     const updateTitle = async (newTitle) => {
-
         if (Title !== newTitle) {
             try {
                 const response = await fetch(url + '/updateTitle', {
@@ -215,12 +216,16 @@ function TodoApp({token}) {
                         noteWithNewTitle.title = newTitle;
                     }
                     setAllNotes([...AllNotes]);
-                } else {
 
+                    return true;
+                } else {
+                    return false;
                 }
             } catch (error) {
                 console.error('Error: ', error);
             }
+        } else {
+            return true; // Title didn't need to be updated
         }
     };
 
@@ -254,11 +259,6 @@ function TodoApp({token}) {
     // Delete the task from the list
     const deleteTask = async (task_id) => {
 
-        // Delete the task from the front-end
-        setTasks( Tasks.filter((element) => {
-            return element[0] !== task_id;
-        }))
-
         try {
            const response = await fetch(url + '/deleteTask', {
                 method: 'DELETE',
@@ -269,9 +269,12 @@ function TodoApp({token}) {
                 body: JSON.stringify({ task_id }),
             })
             if (response.ok) {
-
+                // Delete the task from the front-end
+                setTasks( Tasks.filter((element) => {
+                    return element[0] !== task_id;
+                }));
             } else {
-
+                console.log("Something went wrong deleting the task!");
             }
         } catch (error) {
             console.error('Error: ', error);
@@ -292,7 +295,8 @@ function TodoApp({token}) {
                     noteType={NoteType}
                     list={Tasks}
                     message={Message}
-                    updateNote={updateTitle}
+                    updateTitle={updateTitle}
+                    updateNote={updateNote}
                     handleDeleteTask={deleteTask}
                     handleDeleteNote={deleteNote}
                     handleClose={closeNote}

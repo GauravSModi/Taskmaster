@@ -20,7 +20,7 @@
 
 .note-card-grid {
     /* justify-content: center; */
-    transition: all 2s;
+    transition: all 0.2s;
 }
 
 .card {

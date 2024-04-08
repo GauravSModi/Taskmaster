@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, CloseButton } from 'react-bootstrap';
 import { IoCloseCircle } from "react-icons/io5";
 
-function NoteCard({ showModal, noteId, title, noteType, list, message, updateNote, handleDeleteTask, handleDeleteNote, handleClose }) {
+function NoteCard({ showModal, noteId, title, noteType, list, message, updateTitle, updateNote, handleDeleteTask, handleDeleteNote, handleClose }) {
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [HoveredTask, setHoveredTask] = useState(null);
 
@@ -31,16 +31,26 @@ function NoteCard({ showModal, noteId, title, noteType, list, message, updateNot
     };
 
     const updateHelper = () => {
+
         const newTitle = document.getElementById('modalTitleTextArea').value;
+        const updatedTitle = updateTitle(newTitle)
 
-        // Update the title if it has changed
-        if (newTitle !== title) {
-            updateNote(newTitle);
-        }
+        // const updatedNote = updateNote(noteType, );
 
-        // Close modal window
-        handleClose();
+        // if (updatedTitle && updatedNote) {
+        //     // Close modal window
+        //     handleClose();
+        // } else {
+        //     // TODO: Give error message/pop-up here letting user know update failed
+        // }
     }
+
+
+    // const updateNote = () => {
+    //     let updatedTitle = updateTitle();
+
+
+    // }
 
 
     return (
