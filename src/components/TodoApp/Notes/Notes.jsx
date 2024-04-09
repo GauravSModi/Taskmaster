@@ -66,7 +66,7 @@ function Notes({ VisibleNotes, openNote, Mode }) {
     };
 
     return (
-        <div className='d-block vh-100'>
+        <div className='vh-100 '>
 
             { VisibleNotes.length > 0 &&
                 <div className='note-card-grid row' id='note-card-grid' style={{ marginTop: '100px' }}>

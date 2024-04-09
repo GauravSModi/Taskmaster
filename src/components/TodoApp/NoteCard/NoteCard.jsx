@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, CloseButton } from 'react-bootstrap';
 import { IoCloseCircle } from "react-icons/io5";
 
-function NoteCard({ showModal, noteId, title, noteType, list, message, updateTitle, updateNote, handleDeleteTask, handleDeleteNote, handleClose }) {
+function NoteCard({ showModal, isNew, noteId, title, noteType, list, message, createNote, updateTitle, updateNoteContent, handleDeleteTask, handleDeleteNote, handleClose }) {
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [HoveredTask, setHoveredTask] = useState(null);
 
@@ -11,7 +11,9 @@ function NoteCard({ showModal, noteId, title, noteType, list, message, updateTit
     // Resize Title text area height when modal is activated
     useEffect(() => {
         if (showModal) {
-            resizeTextAreaInput();
+            resizeTextAreaInput('modalTitleTextArea');
+            // resizeTextAreaInput('modalTitleTextArea');
+            // resizeTextAreaInput('modalTitleTextArea');
         }
     }, [showModal]);
 
@@ -23,47 +25,56 @@ function NoteCard({ showModal, noteId, title, noteType, list, message, updateTit
         setHoveredTask(null);
     };
 
-    const resizeTextAreaInput = () => {
-        const textArea = document.getElementById('modalTitleTextArea');
+    const resizeTextAreaInput = (id) => {
+        const textArea = document.getElementById(id);
         textArea.style.height = 'auto';
         textArea.style.height = `${textArea.scrollHeight}px`;
         setTextAreaHeight(`${textArea.scrollHeight}px`);
     };
 
-    const updateHelper = () => {
+    const saveHelper = () => {
 
+        // Get title and note content
         const newTitle = document.getElementById('modalTitleTextArea').value;
-        const updatedTitle = updateTitle(newTitle)
+        let noteContent = null;
+        switch (noteType) {
+            case 0: // note
+                noteContent = document.getElementById('modalNoteTextArea').value;
+                break;
+            case 1: // list
+                break;
+        }
 
-        // const updatedNote = updateNote(noteType, );
+        let saveSucceeded = false;
 
-        // if (updatedTitle && updatedNote) {
-        //     // Close modal window
-        //     handleClose();
-        // } else {
-        //     // TODO: Give error message/pop-up here letting user know update failed
-        // }
+        if (isNew) {
+            // noteContent = document.getElementById('modalNoteTextArea').value;
+            saveSucceeded = createNote(newTitle, noteContent);
+        } else {
+            saveSucceeded = updateTitle(noteId, newTitle) && updateNoteContent(noteId, noteType, noteContent);
+        }
+
+
+        // TODO: Do something if null?
+
+        if (saveSucceeded) {
+            handleClose();
+        } else {
+            // Throw error message/pop-up letting user know that update failed
+        }
     }
 
-
-    // const updateNote = () => {
-    //     let updatedTitle = updateTitle();
-
-
-    // }
-
-
     return (
-        <Modal show={showModal} onHide={handleClose} className='note-modal'>
+        <Modal show={showModal} onHide={handleClose} className='note-modal '>
             <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={handleClose}><IoCloseCircle color='#0d6efd' size='2.5em' /></button>
             <Modal.Header className='border-0 pb-0 me-4'>
                 <textarea
-                    className='title overflow-auto mx-2 border-0 rounded fs-3 w-100'
+                    className='title bg-transparent overflow-auto mx-2 border-0 rounded fs-3 w-100'
                     id='modalTitleTextArea'
                     rows={1}
                     placeholder='Title'
                     defaultValue={title}
-                    onInput={resizeTextAreaInput}
+                    onInput={(event) => resizeTextAreaInput(event.target.id)}
                 />
                 {/* <button type="button" className="btn-close position-absolute top-0 end-0" aria-label="Close" onClick={handleClose}></button> */}
             </Modal.Header>
@@ -75,17 +86,25 @@ function NoteCard({ showModal, noteId, title, noteType, list, message, updateTit
                                 {list.map(task => (
                                     <div
                                         key={task[0]}
-                                        className="form-check"
+                                        className="form-check d-flex"
                                         onMouseEnter={() => handleTaskHover(task[0])}
                                         onMouseLeave={handleTaskLeave}
                                         onFocus={() => handleTaskHover(task[0])}
                                         onBlur={handleTaskLeave} >
 
                                         <input className="form-check-input" type="checkbox" id={task[0]} />
-                                        <label className="form-check-label" htmlFor={task[0]}>
+                                        {/* <label className="form-check-label text-decoration-line-through" htmlFor={task[0]}>
                                             {task[1]}
-                                        </label>
+                                        </label> */}
+                                        <textarea 
+                                            id={`modal-${task[0]}-textarea`}
+                                            className='text-space w-100 border-0 ms-1 me-4 pe-3' 
+                                            htmlFor={task[0]} 
+                                            defaultValue={task[1]} 
+                                            rows={1}
+                                            onInput={(event) => resizeTextAreaInput(event.target.id)} />
                                         {HoveredTask === task[0] && (
+            // <button type='button' className='btn taskDeleteBttn p-0 m-0' id='close-button' onClick={handleClose}><IoCloseCircle color='#0d6efd' size='1.5em' /></button>
                                             <CloseButton
                                                 className='taskDeleteBttn'
                                                 onClick={() => handleDeleteTask(task[0])}
@@ -101,25 +120,38 @@ function NoteCard({ showModal, noteId, title, noteType, list, message, updateTit
                         id='modalNoteTextArea' 
                         className='text-space border border-0 rounded w-100' 
                         placeholder='Note'
-                        // value={message.message}
+                        // value={message}
                         defaultValue={message}
-                        onInput={resizeTextAreaInput} />
+                        onInput={(event) => resizeTextAreaInput(event.target.id)} 
+                        />
                 }
                 {/* <p className='text-danger'>Title cannot exceed 100 characters</p> */}
             </Modal.Body>
-            <Modal.Footer className='border-0 d-flex justify-content-between'>
-                <button type='button' className='btn btn-danger px-3' onClick={() => handleDeleteNote(noteId)}>Delete</button>
 
-                <div>
-                    <button type="button" className="btn btn-secondary" onClick={handleClose}>Cancel</button>
-                    <button type="button" className="btn btn-primary ms-2" style={{paddingLeft:'2.5rem', paddingRight:'2.5rem'}} onClick={updateHelper}>Save</button>
-                </div>
+            {!isNew &&
+                <Modal.Footer className='border-0 d-flex justify-content-between'>
 
-            </Modal.Footer>
+                            <button type='button' className='btn btn-danger px-3' onClick={() => handleDeleteNote(noteId)}>Delete</button>
+
+                            <div>
+                                <button type="button" className="btn btn-secondary" onClick={handleClose}>Cancel</button>
+                                <button type="button" className="btn btn-primary ms-2" style={{paddingLeft:'2rem', paddingRight:'2rem'}} onClick={saveHelper}>Save</button>
+                            </div>
+
+                </Modal.Footer>
+            }
+
+            {isNew && 
+                <Modal.Footer className='border-0 d-flex justify-content-end'>
+                    <div>
+                        <button type="button" className="btn btn-secondary" onClick={handleClose}>Cancel</button>
+                        <button type="button" className="btn btn-primary ms-2" style={{paddingLeft:'2rem', paddingRight:'2rem'}} onClick={saveHelper}>Create</button>
+                    </div>
+                </Modal.Footer>
+            }
+
         </Modal>
     );
 }
-
-
 
 export default NoteCard;

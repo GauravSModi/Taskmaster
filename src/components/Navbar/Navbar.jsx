@@ -16,6 +16,11 @@ function AppNavbar({openCreateNew, Mode, setMode}) {
             <div className="container-fluid">
                 <a className="navbar-brand text-light"></a>
                 <form className="d-flex">
+{/* 
+                    <div className='d-flex justify-content-between m-2 p-2'>
+                        <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
+                        <button className="btn btn-outline-success" type="button">Search</button>
+                    </div> */}
 
                     <div className='btn-group mx-2 my-2' role='group' aria-label="Basic radio toggle button group" >
                         <input 
@@ -50,10 +55,6 @@ function AppNavbar({openCreateNew, Mode, setMode}) {
                                 Lists
                         </label>
                     </div>
-
-                    {/* <input className="form-control mx-2" type="search" placeholder="Search" aria-label="Search"/> */}
-                    {/* <button className="btn btn-outline-success mx-2 " type="button">Search</button> */}
-                    {/* <button className="btn btn-primary fw-bold fs-3 p-3 lh-1" >Create new</button> */}
                     
                         <button className="btn" type='button' onClick={openCreateNew} id='create-new'> 
                                 <FaCirclePlus color='#0d6efd' size='2.5em' title='Create New Note' className='createNewButton'/>

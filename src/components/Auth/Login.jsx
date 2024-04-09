@@ -34,7 +34,6 @@ const LoginForm = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        console.log("Login clicked");
 
         // Check if username or password fields are empty
         if (!checkEmpty(username, password)) {
@@ -80,7 +79,7 @@ const LoginForm = () => {
     };
 
     if (loginSuccess) {
-        console.log(token);
+        // console.log(token);
 
         if (token != null) return <TodoApp token={token} className='w-100'/>;
     }

@@ -18,10 +18,10 @@
     justify-content: center;
 }
 
-.note-card-grid {
+/* .note-card-grid { */
     /* justify-content: center; */
-    transition: all 0.2s;
-}
+    /* transition: all 0.2s; */
+/* } */
 
 .card {
     /* background-color: #A6D7C9;  */
@@ -44,6 +44,10 @@
 
 }
 
+.form-check-input {
+    margin-top: 6.5px;
+}
+
 /* 
 #close-button>* {
 
@@ -52,6 +56,11 @@
 #close-button>*:hover {
     fill: #000000;
 
+} */
+
+/* .note-modal { 
+    width: auto;
+    max-width: 5rem;
 } */
 
 .form-check {

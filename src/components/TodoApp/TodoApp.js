@@ -5,6 +5,7 @@ import NoteCard from './NoteCard/NoteCard';
 import Notes from './Notes/Notes';
 import './TodoApp.css';
 import { url } from '../../index'
+import reportWebVitals from '../../reportWebVitals';
 
 
 function TodoApp({token}) {
@@ -18,7 +19,7 @@ function TodoApp({token}) {
     const [NoteId, setNoteId] = useState(null); // State to keep track of the title
     const [Title, setTitle] = useState(null); // State to keep track of the title
     const [ShowModal, setShowModal] = useState(false); // State to manage modal visibility
-    const [IsNewNote, setIsNewNote] = useState(true); // State to manage if making new note vs showing an old one
+    const [IsNewNote, setIsNewNote] = useState(false); // State to manage if making new note vs showing an old one
 
     // Used to help switch visible notes
     const Modes = {
@@ -71,6 +72,7 @@ function TodoApp({token}) {
         setAllNotes([...AllNotes]);
         setShowModal(false); // Close the modal
         setTitle(null);
+        setMessage(null);
         setTasks(null);
         setNoteId(null);
     };
@@ -78,15 +80,49 @@ function TodoApp({token}) {
 
     const openCreateNew = () => {
         console.log("OpenCreateNew")
+        setIsNewNote(true);
+        if (NoteType === Types.note) {
+            setMessage('');
+        }
+
+        setShowModal(true);
     }
 
     const openNote = (note) => {
+        setIsNewNote(false);
         setNoteId(note.note_id);
         if (note.is_note == Types.note) {
             getMessage(note);
         } else if (note.is_note == Types.list) {
             getTasks(note);
         }
+    };
+
+    const createNote = async (title, message) => {
+        try {
+            const response = await fetch(url + '/createNote', {
+                method: 'POST',
+                headers: { 
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'title': title, 'message': message }),
+            });
+
+            if (response.ok) { // in the 200 range
+                const data = await response.json();
+                // updateMessage(data.note_id, message)
+                return true;
+            } else {
+                const errorData = await response.json();
+                console.log(errorData);
+                return false;
+            }
+
+        } catch (error) {
+            console.error('Error: ', error);
+            return false;
+        };
     };
 
     const getMessage = async (task) => {
@@ -154,6 +190,7 @@ function TodoApp({token}) {
         };
     }
 
+
     // Retreive all notes/lists associated with the user
     const getNotes = async () => {
         try {
@@ -185,16 +222,50 @@ function TodoApp({token}) {
     };
 
 
-    const updateNote = (noteType, noteContent) => {
-        // if (noteType == Types.note) {
-        //     updateMessage(noteContent);
-        // } else if (noteType == Types.list){
-        //     updateList(noteContent);
-        // }
+    const updateNoteContent = (note_id, noteType, noteContent) => {
+        if (noteType == Types.note) {
+            return updateMessage(note_id, noteContent);
+        } else if (noteType == Types.list){
+            return updateList(note_id, noteContent);
+        }
+        return false;
+    };
+
+    const updateList = async (tasks) => {
+
+    }
+
+    const updateMessage = async (note_id, newMessage) => {
+        console.log("New message: ", newMessage);
+        if (newMessage !== Message) {
+            try {
+                const response = await fetch(url + '/updateMessage', {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        'note_id': note_id, 
+                        'message': newMessage
+                    })
+                });
+                if (response.ok) {
+                    const data = await response.json()
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        } else {
+            return true; // Message didn't need to be updated
+        }
     };
 
     // Update note title if it has changed
-    const updateTitle = async (newTitle) => {
+    const updateTitle = async (note_id, newTitle) => {
         if (Title !== newTitle) {
             try {
                 const response = await fetch(url + '/updateTitle', {
@@ -204,7 +275,7 @@ function TodoApp({token}) {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ 
-                        'note_id': NoteId, 
+                        'note_id': note_id, 
                         'title': newTitle 
                     })
                 });
@@ -258,7 +329,6 @@ function TodoApp({token}) {
 
     // Delete the task from the list
     const deleteTask = async (task_id) => {
-
         try {
            const response = await fetch(url + '/deleteTask', {
                 method: 'DELETE',
@@ -282,21 +352,20 @@ function TodoApp({token}) {
     };
 
     return (
-        <div className='todo-app'>
+        <div className='todo-app vh-100'>
             {/* <AppSidebar/> */}
-            <div>
                 <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} />
-            </div>
                 <NoteCard
                     showModal={ShowModal}
+                    isNew={IsNewNote}
                     noteId={NoteId}
-                    // isNew={isNew}
                     title={Title}
                     noteType={NoteType}
                     list={Tasks}
                     message={Message}
+                    createNote={createNote}
                     updateTitle={updateTitle}
-                    updateNote={updateNote}
+                    updateNoteContent={updateNoteContent}
                     handleDeleteTask={deleteTask}
                     handleDeleteNote={deleteNote}
                     handleClose={closeNote}
