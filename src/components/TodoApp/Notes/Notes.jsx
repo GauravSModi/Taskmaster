@@ -74,10 +74,10 @@ function Notes({ VisibleNotes, openNote, Mode }) {
                         <div
                             key={task.note_id}
                             id={`card-${task.note_id}`}
-                            className="card p-3 mx-3 my-4 rounded bg-secondary text-white"
+                            className="card cursor-pointer p-3 mx-3 my-4 rounded bg-secondary text-white"
                             style={{ width: "12rem" }}
                             onClick={() => openNote(task)} >
-                            <div className="card-title" id={`title-${task.note_id}`} ref={titleRef}>{task.title}</div>
+                            <div className="card-title pe-none" id={`title-${task.note_id}`} ref={titleRef}>{task.title}</div>
                         </div>
                     ))}
                 </div>

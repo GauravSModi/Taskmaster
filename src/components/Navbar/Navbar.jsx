@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaCirclePlus } from "react-icons/fa6";
+import logo from "../../logo.svg";
 import './Navbar.css';
 
 function AppNavbar({openCreateNew, Mode, setMode}) {
@@ -10,11 +11,14 @@ function AppNavbar({openCreateNew, Mode, setMode}) {
         }
     };
 
+    // <img className="pb-5" src={logo} alt="My Logo" /> {/* Display the logo image */}
 
     return (
         <nav className="navbar fixed-top navbar-light bg-light shadow vw-100 text-light">
             <div className="container-fluid">
-                <a className="navbar-brand text-light"></a>
+                <a class="navbar-brand" >
+                    <img src={logo} alt="logo" width="60" height="60"/>
+                </a>
                 <form className="d-flex">
 {/* 
                     <div className='d-flex justify-content-between m-2 p-2'>
