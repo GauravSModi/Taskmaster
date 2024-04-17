@@ -32,4 +32,4 @@ reportWebVitals();
 
 // export const url = 'http://localhost:8000';
 // export const url = 'http://10.0.0.157:8000';
-export const url = 'http://54.82.7.162:8000';
+export const url = ' https://cors-everywhere.herokuapp.com/http://54.82.7.162:8000';
