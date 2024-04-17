@@ -236,7 +236,6 @@ function TodoApp({token}) {
     }
 
     const updateMessage = async (note_id, newMessage) => {
-        console.log("New message: ", newMessage);
         if (newMessage !== Message) {
             try {
                 const response = await fetch(url + '/updateMessage', {

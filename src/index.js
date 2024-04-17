@@ -30,5 +30,6 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-// export const url = 'http://localhost:8009';
-export const url = 'http://10.0.0.157:8009';
+// export const url = 'http://localhost:8000';
+// export const url = 'http://10.0.0.157:8000';
+export const url = 'http://54.82.7.162:8000';

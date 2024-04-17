@@ -16,7 +16,7 @@ function AppNavbar({openCreateNew, Mode, setMode}) {
     return (
         <nav className="navbar fixed-top navbar-light bg-light shadow vw-100 text-light">
             <div className="container-fluid">
-                <a class="navbar-brand" >
+                <a className="navbar-brand" >
                     <img src={logo} alt="logo" width="60" height="60"/>
                 </a>
                 <form className="d-flex">
