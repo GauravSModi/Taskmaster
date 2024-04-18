@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, CloseButton } from 'react-bootstrap';
 import { IoCloseCircle } from "react-icons/io5";
 
-function NoteCard({ showModal, isNew, noteId, title, noteType, list, message, createNote, updateTitle, updateNoteContent, handleDeleteTask, handleDeleteNote, handleClose }) {
+function NoteCard({ showModal, isNew, noteId, title, noteType, list, message, createNote, updateTitle, updateNoteContent, handleDeleteTask, handleDeleteNote, handleClose, refresh }) {
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [HoveredTask, setHoveredTask] = useState(null);
 

@@ -34,9 +34,12 @@ function TodoApp({token}) {
     }
 
     useEffect(() => {
-        // Functions to be called immediately upon component mount
         getNotes();
-    }, []); // Empty dependency array to ensure the effect runs only once
+        const intervalId = setInterval(() => {
+            getNotes();
+        }, 60000);
+        return () => clearInterval(intervalId);
+    }, []);
 
     useEffect(() => {
         changeMode();
@@ -111,7 +114,7 @@ function TodoApp({token}) {
 
             if (response.ok) { // in the 200 range
                 const data = await response.json();
-                // updateMessage(data.note_id, message)
+                setAllNotes([...AllNotes, data.newNote]);
                 return true;
             } else {
                 const errorData = await response.json();
@@ -209,6 +212,7 @@ function TodoApp({token}) {
                     // setAllNotes([{note_id: -1}])
                     return;
                 } else{
+                    console.log(data.notes);
                     setAllNotes(data.notes);
                 }
 
