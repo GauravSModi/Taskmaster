@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FaCirclePlus } from "react-icons/fa6";
+import { FaCirclePlus, FaRotate } from "react-icons/fa6";
+// import { IoMdRefreshCircle } from "react-icons/io";
 import logo from "../../logo.svg";
 import './Navbar.css';
 
-function AppNavbar({openCreateNew, Mode, setMode}) {
+function AppNavbar({openCreateNew, Mode, setMode, refresh}) {
 
     const handleModeChange = (event) => {
         if (event.target.id != Mode) {
@@ -25,6 +26,9 @@ function AppNavbar({openCreateNew, Mode, setMode}) {
                         <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
                         <button className="btn btn-outline-success" type="button">Search</button>
                     </div> */}
+                    <button className="btn" type='button' onClick={refresh} id='create-new'> 
+                            <FaRotate color='#0d6efd' size='2.5em' title='refresh' className='refresh p-0 m-0'/>
+                    </button>
 
                     <div className='btn-group mx-2 my-2' role='group' aria-label="Basic radio toggle button group" >
                         <input 
@@ -59,10 +63,10 @@ function AppNavbar({openCreateNew, Mode, setMode}) {
                                 Lists
                         </label>
                     </div>
-                    
-                        <button className="btn" type='button' onClick={openCreateNew} id='create-new'> 
-                                <FaCirclePlus color='#0d6efd' size='2.5em' title='Create New Note' className='createNewButton'/>
-                        </button>
+                
+                    <button className="btn" type='button' onClick={openCreateNew} id='create-new'> 
+                            <FaCirclePlus color='#0d6efd' size='2.5em' title='Create New Note' className='createNewButton'/>
+                    </button>
                 </form>
             </div>
         </nav>

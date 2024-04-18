@@ -353,7 +353,7 @@ function TodoApp({token}) {
     return (
         <div className='todo-app vh-100'>
             {/* <AppSidebar/> */}
-                <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} />
+                <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} refresh={getNotes}/>
                 <NoteCard
                     showModal={ShowModal}
                     isNew={IsNewNote}

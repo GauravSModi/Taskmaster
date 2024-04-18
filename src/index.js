@@ -30,7 +30,7 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-// export const url = 'http://localhost:8000';
+export const url = 'http://localhost:8000';
 // export const url = 'http://10.0.0.157:8000';
 // export const url = 'http://35.172.163.23:8000';
-export const url = 'http://gauravmodi.ca:8000';
+// export const url = 'http://gauravmodi.ca:8000';
