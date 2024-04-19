@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FaCirclePlus, FaRotate } from "react-icons/fa6";
-// import { IoMdRefreshCircle } from "react-icons/io";
+import { FaSignOutAlt } from "react-icons/fa";
 import logo from "../../logo.svg";
 import './Navbar.css';
 
-function AppNavbar({openCreateNew, Mode, setMode, refresh}) {
+function AppNavbar({openCreateNew, Mode, setMode, refresh, signout}) {
 
     const handleModeChange = (event) => {
         if (event.target.id != Mode) {
@@ -26,11 +26,8 @@ function AppNavbar({openCreateNew, Mode, setMode, refresh}) {
                         <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
                         <button className="btn btn-outline-success" type="button">Search</button>
                     </div> */}
-                    <button className="btn" type='button' onClick={refresh} id='create-new'> 
-                            <FaRotate color='#0d6efd' size='2.5em' title='refresh' className='refresh p-0 m-0'/>
-                    </button>
 
-                    <div className='btn-group mx-2 my-2' role='group' aria-label="Basic radio toggle button group" >
+                    <div className='btn-group m-2 p-2' role='group' aria-label="Basic radio toggle button group" >
                         <input 
                             type="radio" 
                             className="btn-check" 
@@ -41,7 +38,7 @@ function AppNavbar({openCreateNew, Mode, setMode, refresh}) {
                             onChange={handleModeChange} 
                             onClick={handleModeChange}/>
                         <label 
-                            className="btn btn-outline-primary fs-5 px-4" 
+                            className="btn btn-outline-primary fs-5 " 
                             htmlFor="btn-radio-notes" 
                             id="btn-radio-label" >
                                 Notes
@@ -57,15 +54,23 @@ function AppNavbar({openCreateNew, Mode, setMode, refresh}) {
                             onChange={handleModeChange}
                             onClick={handleModeChange}/>
                         <label 
-                            className="btn btn-outline-primary fs-5 px-4" 
+                            className="btn btn-outline-primary fs-5 " 
                             htmlFor="btn-radio-lists" 
                             id="btn-radio-label">
                                 Lists
                         </label>
                     </div>
                 
-                    <button className="btn" type='button' onClick={openCreateNew} id='create-new'> 
-                            <FaCirclePlus color='#0d6efd' size='2.5em' title='Create New Note' className='createNewButton'/>
+                    <button className="btn m-2 p-2" type='button' onClick={openCreateNew} id='create-new'> 
+                            <FaCirclePlus color='#0d6efd' size='2em' title='Create New Note' className='createNewButton'/>
+                    </button>
+
+                    <button className="btn m-2 p-2" type='button' onClick={refresh} id='create-new'> 
+                            <FaRotate color='#0d6efd' size='2em' title='refresh' className='refresh p-0 m-0'/>
+                    </button>
+
+                    <button className="btn m-2 p-2" type='button' onClick={signout} id='signout'> 
+                            <FaSignOutAlt color='#0d6efd' size='2em' title='Sign-out' className='signout'/>
                     </button>
                 </form>
             </div>

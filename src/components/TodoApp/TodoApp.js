@@ -5,11 +5,12 @@ import NoteCard from './NoteCard/NoteCard';
 import Notes from './Notes/Notes';
 import './TodoApp.css';
 import { url } from '../../index'
-import reportWebVitals from '../../reportWebVitals';
+import LoginForm from '../Auth/Login';
 
 
 function TodoApp({token}) {
 
+    const [logout, setLogout] = useState(false);
     const [Mode, setMode] = useState('btn-radio-notes'); // State to manage which type of notes is visible
     const [NoteType, setNoteType] = useState(0); // State to manage which type of notes is visible
     const [AllNotes, setAllNotes] = useState([]); // State to keep track of all notes assocciated with the user
@@ -52,6 +53,19 @@ function TodoApp({token}) {
     useEffect(() => {
         changeVisible();
     }, [AllNotes]);
+
+    const signout = () => {
+        console.log('Signing out');
+
+        // TODO: Show an "ARE YOU SURE" warning here
+
+        localStorage.removeItem('jwt_token');
+        setLogout(true);
+    };
+
+    if (logout) {
+        return <LoginForm />;
+    }
 
     const changeVisible = () => {
         setVisibleNotes(AllNotes.filter((curr) => {
@@ -212,7 +226,6 @@ function TodoApp({token}) {
                     // setAllNotes([{note_id: -1}])
                     return;
                 } else{
-                    console.log(data.notes);
                     setAllNotes(data.notes);
                 }
 
@@ -355,27 +368,29 @@ function TodoApp({token}) {
     };
 
     return (
+        // <div className=''>
+            // <AppSidebar className='w-25 h-25'/>
         <div className='todo-app vh-100'>
-            {/* <AppSidebar/> */}
-                <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} refresh={getNotes}/>
-                <NoteCard
-                    showModal={ShowModal}
-                    isNew={IsNewNote}
-                    noteId={NoteId}
-                    title={Title}
-                    noteType={NoteType}
-                    list={Tasks}
-                    message={Message}
-                    createNote={createNote}
-                    updateTitle={updateTitle}
-                    updateNoteContent={updateNoteContent}
-                    handleDeleteTask={deleteTask}
-                    handleDeleteNote={deleteNote}
-                    handleClose={closeNote}
-                />
+            <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} refresh={getNotes} signout={signout} />
+            <NoteCard
+                showModal={ShowModal}
+                isNew={IsNewNote}
+                noteId={NoteId}
+                title={Title}
+                noteType={NoteType}
+                list={Tasks}
+                message={Message}
+                createNote={createNote}
+                updateTitle={updateTitle}
+                updateNoteContent={updateNoteContent}
+                handleDeleteTask={deleteTask}
+                handleDeleteNote={deleteNote}
+                handleClose={closeNote}
+            />
 
-                <Notes VisibleNotes={VisibleNotes} openNote={openNote} Mode={Mode} />
+            <Notes VisibleNotes={VisibleNotes} openNote={openNote} Mode={Mode} />
         </div>
+        // </div>
     );
 };
 

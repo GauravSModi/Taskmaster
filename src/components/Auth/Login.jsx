@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoApp from '../TodoApp/TodoApp';
 import SignupForm from './Signup';
 import logo from '../../logo.svg';
 import './Auth.css';
 import { url } from '../../index'
+import {jwtDecode} from 'jwt-decode';
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
@@ -13,6 +14,25 @@ const LoginForm = () => {
     const [token, setToken] = useState(null);
     const [alertMessage, setAlertMessage] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
+
+    // useEffect(() => {
+    //     const token = localStorage.getItem('jwt_token');
+
+    //     if (!token) return;
+
+    //     // Decode JWT token to access expiration time
+    //     const decoded = jwtDecode(token);
+    //     console.log("Decoded token: ", decoded);
+    //     if (decoded.exp <= Date.now() / 1000) {
+    //         localStorage.removeItem('jwt_token');
+    //         return;
+    //     }
+        
+    //     console.log("Moving on with token: ", token);
+    //     setToken(token);
+    //     setLoginSuccess(true);
+
+    // }, []);
 
     const checkEmpty = (user, pass) => {
         return user.length > 0 && pass.length > 0;
@@ -54,6 +74,7 @@ const LoginForm = () => {
                 const data = await response.json();
 
                 setToken(data.token);
+                localStorage.setItem('jwt_token', data.token);
 
                 // Move on to application
                 setLoginSuccess(true);
@@ -79,8 +100,6 @@ const LoginForm = () => {
     };
 
     if (loginSuccess) {
-        // console.log(token);
-
         if (token != null) return <TodoApp token={token} className='w-100'/>;
     }
 
@@ -109,9 +128,6 @@ const LoginForm = () => {
                     />
                 </div>
                 <div className='mb-3'>
-                    {/* <label htmlFor='loginPassword' className='form-label float-start'>
-                        Password
-                    </label> */}
                     <input 
                         type='password'
                         id='loginPassword'

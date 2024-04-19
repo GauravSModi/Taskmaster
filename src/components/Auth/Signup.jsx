@@ -11,6 +11,7 @@ const SignupForm = () => {
     const [password, setPassword] = useState('');
     const [signupSuccess, setSignupSuccess] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const [token, setToken] = useState(null);
     const [alertMessage, setAlertMessage] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
 
@@ -73,11 +74,13 @@ const SignupForm = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                
-                if (data.message.includes('successful')){
-                    // Move on to application
-                    setSignupSuccess(true);
-                }
+
+                // Store jwt token
+                setToken(data.token);
+                localStorage.setItem('jwt_token', data.token);
+
+                // Move on to application
+                setSignupSuccess(true);
             } else {
                 // Signup failed due to an error
                 const errorData = await response.json();
@@ -98,7 +101,7 @@ const SignupForm = () => {
     };
 
     if (signupSuccess) {
-        return <TodoApp />;
+        if (token != null) return <TodoApp token={token} className='w-100'/>;
     }
 
     if (isLogin) {
