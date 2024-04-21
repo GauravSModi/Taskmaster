@@ -13,13 +13,11 @@ function App() {
 
     useEffect(() => {
         const storedToken = localStorage.getItem('jwt_token');
-        console.log("Token:", storedToken);
 
         if (!storedToken) return;
     
         // Decode JWT token to access expiration time
         const decoded = jwtDecode(storedToken);
-        console.log("Decoded token: ", decoded);
         if (decoded.exp <= Date.now() / 1000) {
             localStorage.removeItem('jwt_token');
             return;
@@ -30,7 +28,6 @@ function App() {
     }, [])
 
     if (signedIn) {
-        console.log("Moving on with token: ", token);
         return <TodoApp token={token} className='w-100'/>;
     }
 

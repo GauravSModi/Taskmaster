@@ -46,6 +46,12 @@ function TodoApp({token}) {
         changeMode();
     }, [Mode]);
 
+    const changeVisible = () => {
+        setVisibleNotes(AllNotes.filter((curr) => {
+            return curr.is_note === NoteType;
+        }))
+    };
+
     useEffect(() => {
         changeVisible();
     }, [NoteType]);
@@ -67,11 +73,6 @@ function TodoApp({token}) {
         return <LoginForm />;
     }
 
-    const changeVisible = () => {
-        setVisibleNotes(AllNotes.filter((curr) => {
-            return curr.is_note === NoteType;
-        }))
-    };
 
     const changeMode = () => {
         switch(Mode) {
@@ -239,6 +240,20 @@ function TodoApp({token}) {
     };
 
 
+    const searchNotes = (e) => {
+        // console.log(document.getElementById(e.target.id).value)
+
+        const searchString = document.getElementById(e.target.id).value.trim().toLowerCase();
+
+        // TODO: Get all notes and search in them
+
+        setVisibleNotes(AllNotes.filter((curr) => {
+            console.log(curr);
+            return (curr.is_note === NoteType && curr.title.toLowerCase().includes(searchString));
+        }))
+    };
+
+
     const updateNoteContent = (note_id, noteType, noteContent) => {
         if (noteType == Types.note) {
             return updateMessage(note_id, noteContent);
@@ -371,7 +386,14 @@ function TodoApp({token}) {
         // <div className=''>
             // <AppSidebar className='w-25 h-25'/>
         <div className='todo-app vh-100'>
-            <AppNavbar openCreateNew={openCreateNew} Mode={Mode} setMode={setMode} refresh={getNotes} signout={signout} />
+            <AppNavbar 
+                Mode={Mode} 
+                setMode={setMode} 
+                openCreateNew={openCreateNew}
+                searchNotes={searchNotes}
+                refresh={getNotes} 
+                signout={signout}
+            />
             <NoteCard
                 showModal={ShowModal}
                 isNew={IsNewNote}

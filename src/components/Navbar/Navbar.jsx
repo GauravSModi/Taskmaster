@@ -4,7 +4,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import logo from "../../logo.svg";
 import './Navbar.css';
 
-function AppNavbar({openCreateNew, Mode, setMode, refresh, signout}) {
+function AppNavbar({Mode, setMode, openCreateNew, searchNotes, refresh, signout}) {
 
     const handleModeChange = (event) => {
         if (event.target.id != Mode) {
@@ -12,20 +12,18 @@ function AppNavbar({openCreateNew, Mode, setMode, refresh, signout}) {
         }
     };
 
-    // <img className="pb-5" src={logo} alt="My Logo" /> {/* Display the logo image */}
-
     return (
         <nav className="navbar fixed-top navbar-light bg-light shadow vw-100 text-light">
             <div className="container-fluid">
-                <a className="navbar-brand" >
+                <a className="navbar-brand p-0 m-0" >
                     <img src={logo} alt="logo" width="60" height="60"/>
                 </a>
                 <form className="d-flex">
-{/* 
+
                     <div className='d-flex justify-content-between m-2 p-2'>
-                        <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
-                        <button className="btn btn-outline-success" type="button">Search</button>
-                    </div> */}
+                        <input className="form-control" id="searchField" type="search" placeholder="Search" aria-label="Search" onInput={(e) => searchNotes(e)}/>
+                        {/* <button className="btn btn-outline-primary" type="button">Search</button> */}
+                    </div>
 
                     <div className='btn-group m-2 p-2' role='group' aria-label="Basic radio toggle button group" >
                         <input 
@@ -38,7 +36,7 @@ function AppNavbar({openCreateNew, Mode, setMode, refresh, signout}) {
                             onChange={handleModeChange} 
                             onClick={handleModeChange}/>
                         <label 
-                            className="btn btn-outline-primary fs-5 " 
+                            className="btn btn-outline-primary h-5 " 
                             htmlFor="btn-radio-notes" 
                             id="btn-radio-label" >
                                 Notes
@@ -54,7 +52,7 @@ function AppNavbar({openCreateNew, Mode, setMode, refresh, signout}) {
                             onChange={handleModeChange}
                             onClick={handleModeChange}/>
                         <label 
-                            className="btn btn-outline-primary fs-5 " 
+                            className="btn btn-outline-primary " 
                             htmlFor="btn-radio-lists" 
                             id="btn-radio-label">
                                 Lists
