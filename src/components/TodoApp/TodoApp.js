@@ -33,6 +33,35 @@ function TodoApp({token}) {
         note: 0,
         list: 1
     }
+        // Retreive all notes/lists associated with the user
+        const getNotes = async () => {
+            try {
+                const response = await fetch(url + '/getNotes', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                if (response.ok) { // in the 200 range)
+                    const data = await response.json();
+    
+                    if (data.notes === "No notes Found") {
+                        // setAllNotes([{note_id: -1}])
+                        return;
+                    } else{
+                        setAllNotes(data.notes);
+                    }
+    
+                } else {
+                    const errorData = await response.json();
+                    console.log(errorData);
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        };
 
     useEffect(() => {
         getNotes();
@@ -41,6 +70,19 @@ function TodoApp({token}) {
         }, 60000);
         return () => clearInterval(intervalId);
     }, []);
+
+    const changeMode = () => {
+        switch(Mode) {
+            case Modes.note:
+                setNoteType(Types.note);
+                break;
+            
+            case Modes.list:
+                setNoteType(Types.list);
+                break;
+        }
+    };
+
 
     useEffect(() => {
         changeMode();
@@ -61,8 +103,6 @@ function TodoApp({token}) {
     }, [AllNotes]);
 
     const signout = () => {
-        console.log('Signing out');
-
         // TODO: Show an "ARE YOU SURE" warning here
 
         localStorage.removeItem('jwt_token');
@@ -70,21 +110,8 @@ function TodoApp({token}) {
     };
 
     if (logout) {
-        return <LoginForm />;
+        return <LoginForm className='w-100' />;
     }
-
-
-    const changeMode = () => {
-        switch(Mode) {
-            case Modes.note:
-                setNoteType(Types.note);
-                break;
-            
-            case Modes.list:
-                setNoteType(Types.list);
-                break;
-        }
-    };
     
     const closeNote = () => {
         setAllNotes([...AllNotes]);
@@ -97,12 +124,8 @@ function TodoApp({token}) {
 
 
     const openCreateNew = () => {
-        console.log("OpenCreateNew")
         setIsNewNote(true);
-        if (NoteType === Types.note) {
-            setMessage('');
-        }
-
+        if (NoteType === Types.note) setMessage('');
         setShowModal(true);
     }
 
@@ -209,48 +232,14 @@ function TodoApp({token}) {
     }
 
 
-    // Retreive all notes/lists associated with the user
-    const getNotes = async () => {
-        try {
-            const response = await fetch(url + '/getNotes', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) { // in the 200 range)
-                const data = await response.json();
-
-                if (data.notes === "No notes Found") {
-                    // setAllNotes([{note_id: -1}])
-                    return;
-                } else{
-                    setAllNotes(data.notes);
-                }
-
-            } else {
-                const errorData = await response.json();
-                console.log(errorData);
-            }
-        } catch (error) {
-            console.error('Error: ', error);
-        }
-    };
-
-
     const searchNotes = (e) => {
-        // console.log(document.getElementById(e.target.id).value)
-
         const searchString = document.getElementById(e.target.id).value.trim().toLowerCase();
 
-        // TODO: Get all notes and search in them
+        // TODO: Get all notes and search in their contents too
 
         setVisibleNotes(AllNotes.filter((curr) => {
-            console.log(curr);
             return (curr.is_note === NoteType && curr.title.toLowerCase().includes(searchString));
-        }))
+        }));
     };
 
 
