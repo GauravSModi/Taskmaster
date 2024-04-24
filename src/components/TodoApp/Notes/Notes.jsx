@@ -69,8 +69,6 @@ function Notes({ VisibleNotes, openNote, Mode }) {
         <div className='vh-100 '>
 
             { VisibleNotes.length > 0 &&
-
-            
                 <div className='note-card-grid row' id='note-card-grid' style={{ marginTop: '100px' }}>
                     {VisibleNotes.map(task => (
                         <div
@@ -87,13 +85,7 @@ function Notes({ VisibleNotes, openNote, Mode }) {
 
 
             {VisibleNotes.length === 0 && 
-                <div className='d-flex h-100 justify-content-center align-items-center'>     <hr
-                style={{
-                    color: 'blue',
-                    backgroundColor: 'blue',
-                    height: 5
-                }}
-            />
+                <div className='d-flex h-100 justify-content-center align-items-center'>
                     <p className='text-center text-muted'>Empty</p>
                 </div>
             }

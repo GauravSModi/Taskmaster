@@ -6,6 +6,7 @@ import Notes from './Notes/Notes';
 import './TodoApp.css';
 import { url } from '../../index'
 import LoginForm from '../Auth/Login';
+import App from '../../App';
 
 
 function TodoApp({token}) {
@@ -110,7 +111,7 @@ function TodoApp({token}) {
     };
 
     if (logout) {
-        return <LoginForm className='w-100' />;
+        return <App />;
     }
     
     const closeNote = () => {
