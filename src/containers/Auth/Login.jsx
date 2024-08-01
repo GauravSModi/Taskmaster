@@ -108,7 +108,7 @@ const LoginForm = () => {
     }
 
     return (
-        <div className="auth-form-container ">
+        <div className="auth-form-container">
             
             <img className="pb-5" src={logo} alt="My Logo" /> {/* Display the logo image */}
             <form onSubmit={handleLogin}>

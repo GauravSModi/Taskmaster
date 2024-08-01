@@ -42,6 +42,7 @@ function NoteCard({ showModal, isNew, noteId, title, noteType, list, message, cr
                 noteContent = document.getElementById('modalNoteTextArea').value;
                 break;
             case 1: // list
+                
                 break;
         }
 

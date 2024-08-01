@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import LoginForm from './components/Auth/Login';
+import LoginForm from './containers/Auth/Login';
 import {jwtDecode} from 'jwt-decode';
-import TodoApp from './components/TodoApp/TodoApp';
+import TodoApp from './containers/TodoApp/TodoApp';
 import './App.css';
 
 

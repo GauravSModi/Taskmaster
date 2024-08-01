@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import AppSidebar from '../Sidebar/Sidebar';
-import AppNavbar from '../Navbar/Navbar';
+import AppNavbar from '../../components/Navbar/Navbar';
 import NoteCard from './NoteCard/NoteCard';
 import Notes from './Notes/Notes';
 import './TodoApp.css';
 import { url } from '../../index'
-import LoginForm from '../Auth/Login';
 import App from '../../App';
 
 
