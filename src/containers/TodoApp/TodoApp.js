@@ -241,6 +241,16 @@ function TodoApp({token}) {
         }));
     };
 
+    const updateNote = (note_id, noteType, newTitle, noteContent) => {
+
+        // Update the title (called function will check if different)
+        let updateTitleSuccessful = updateTitle(note_id, newTitle);
+
+        // Update the content
+        let updateContentSuccessful = updateNoteContent(note_id, noteType, noteContent);
+
+        return updateTitleSuccessful && updateContentSuccessful;
+    }
 
     const updateNoteContent = (note_id, noteType, noteContent) => {
         if (noteType == Types.note) {
@@ -250,10 +260,6 @@ function TodoApp({token}) {
         }
         return false;
     };
-
-    const updateList = async (tasks) => {
-
-    }
 
     const updateMessage = async (note_id, newMessage) => {
         if (newMessage !== Message) {
@@ -269,6 +275,7 @@ function TodoApp({token}) {
                         'message': newMessage
                     })
                 });
+
                 if (response.ok) {
                     const data = await response.json()
                     return true;
@@ -282,6 +289,36 @@ function TodoApp({token}) {
             return true; // Message didn't need to be updated
         }
     };
+
+    const updateList = async (note_id, newList) => {
+        if (newList !== Tasks) {
+            try {
+                const response = await fetch(url + '/updateList', {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        'note_id': note_id, 
+                        'list': newList
+                    })
+                })
+
+                if (response.ok) {
+                    const data = await response.json()
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (error) {
+                console.log('Error: ', error);
+            }
+        } else {
+            return true; // List didn't need to be updated
+        }
+    }
+
 
     // Update note title if it has changed
     const updateTitle = async (note_id, newTitle) => {
@@ -391,8 +428,7 @@ function TodoApp({token}) {
                 list={Tasks}
                 message={Message}
                 createNote={createNote}
-                updateTitle={updateTitle}
-                updateNoteContent={updateNoteContent}
+                updateNote={updateNote}
                 handleDeleteTask={deleteTask}
                 handleDeleteNote={deleteNote}
                 handleClose={closeNote}
