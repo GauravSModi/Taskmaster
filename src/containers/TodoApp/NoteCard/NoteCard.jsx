@@ -6,13 +6,13 @@ import { IoMdAdd } from "react-icons/io";
 
 function NoteCard({ showModal, isNew, noteId, title, 
                     noteType, list, setList, message, createNote, 
-                    updateNote, handleDeleteTask, 
-                    handleDeleteNote, handleClose, refresh }) {
+                    updateNote, handleDeleteNote, handleClose, refresh }) {
 
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [selectedTask, setSelectedTask] = useState(null);
     const [hoveredTask, setHoveredTask] = useState(null);
     const [oldList, setOldList] = useState(list);
+    const [deleteList, setDeleteList] = useState([]);
     const [newTaskCounter, setNewTaskCounter] = useState(0);
     const [newTaskActive, setNewTaskActive] = useState(null);
     const [newTaskTextarea, setNewTaskTextarea] = useState(null);
@@ -25,6 +25,7 @@ function NoteCard({ showModal, isNew, noteId, title,
             setOldList(list);
         } else {
             setNewTaskCounter(0);
+            setDeleteList([]);
         }
     }, [showModal]);
 
@@ -108,9 +109,21 @@ function NoteCard({ showModal, isNew, noteId, title,
         setSelectedTask(null);
     };
     
-    // Delete task before adding it to the database
-    const handleDeleteNewTask = () => {
+    // Delete the task from the front-end
+    const removeNewTaskFromList = (task_id) => {
+        setList(list.filter((element) => {
+            return element[0] !== task_id;
+        }));
+    };
 
+    // Delete task from front-end and add it to delete array to be deleted.
+    // Array is sent to database if the list is saved.
+    const handleDeleteTask = (task_id) => {
+        if (!task_id.toString().includes('newTask')) {
+            setDeleteList([...deleteList, task_id]);
+        }
+
+        removeNewTaskFromList(task_id);
     };
 
     const resizeTextAreaInput = (id) => {
@@ -129,7 +142,6 @@ function NoteCard({ showModal, isNew, noteId, title,
                 list[i][1] = taskValue;
                 const taskCheckId = list[i][0];
                 const taskCheckValue = document.getElementById(taskCheckId).checked? 1 : 0;
-                console.log(taskCheckValue);
                 list[i][2] = taskCheckValue;
             } catch (e) {
                 console.log('Error getting value from task:', e)
@@ -148,7 +160,7 @@ function NoteCard({ showModal, isNew, noteId, title,
                 break;
             case 1: // Save list
                 updateList();
-                noteContent = list;
+                noteContent = {list, deleteList};
                 break;
         }
 

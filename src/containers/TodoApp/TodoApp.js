@@ -291,9 +291,8 @@ function TodoApp({token}) {
         }
     };
 
-    const updateList = async (note_id, newList) => {
-        console.log("updateList");
-        console.log(newList);
+    const updateList = async (note_id, noteContent) => {
+        const { list, deleteList } = noteContent;
         try {
             const response = await fetch(url + '/updateList', {
                 method: 'POST',
@@ -303,7 +302,8 @@ function TodoApp({token}) {
                 },
                 body: JSON.stringify({ 
                     'note_id': note_id, 
-                    'list': newList
+                    'new_list': list,
+                    'delete_list': deleteList
                 })
             })
 
@@ -381,41 +381,41 @@ function TodoApp({token}) {
         }
     };
 
-    // Delete the task from the front-end
-    const removeTaskFromList = (task_id) => {
-        setTasks( Tasks.filter((element) => {
-            return element[0] !== task_id;
-        }));
-    };
+    // // Delete the task from the front-end
+    // const removeNewTaskFromList = (task_id) => {
+    //     setTasks( Tasks.filter((element) => {
+    //         return element[0] !== task_id;
+    //     }));
+    // };
 
     // Delete the task from the list
-    const deleteTask = async (task_id) => {
+    // const deleteTask = async (task_id) => {
 
-        // New task
-        if (task_id.toString().includes('newTask')) {
-            removeTaskFromList(task_id);
-            return;
-        }
+    //     // New task
+    //     if (task_id.toString().includes('newTask')) {
+    //         removeNewTaskFromList(task_id);
+    //         return;
+    //     }
 
-        // Existing task
-        try {
-            const response = await fetch(url + '/deleteTask', {
-                method: 'DELETE',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                },
-                body: JSON.stringify({ task_id }),
-            })
-            if (response.ok) {
-            removeTaskFromList(task_id);
-            } else {
-                console.log("Something went wrong deleting the task!");
-            }
-        } catch (error) {
-            console.error('Error: ', error);
-        }
-    };
+    //     // Existing task
+    //     try {
+    //         const response = await fetch(url + '/deleteTask', {
+    //             method: 'DELETE',
+    //             headers: { 
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': 'Bearer ' + token,
+    //             },
+    //             body: JSON.stringify({ task_id }),
+    //         })
+    //         if (response.ok) {
+    //         removeTaskFromList(task_id);
+    //         } else {
+    //             console.log("Something went wrong deleting the task!");
+    //         }
+    //     } catch (error) {
+    //         console.error('Error: ', error);
+    //     }
+    // };
 
     return (
         // <div className=''>
@@ -440,7 +440,7 @@ function TodoApp({token}) {
                 message={Message}
                 createNote={createNote}
                 updateNote={updateNote}
-                handleDeleteTask={deleteTask}
+                // handleDeleteTask={deleteTask}
                 handleDeleteNote={deleteNote}
                 handleClose={closeNote}
             />
