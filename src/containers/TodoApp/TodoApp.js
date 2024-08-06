@@ -262,6 +262,7 @@ function TodoApp({token}) {
     };
 
     const updateMessage = async (note_id, newMessage) => {
+        console.log("updateMessage");
         if (newMessage !== Message) {
             try {
                 const response = await fetch(url + '/updateMessage', {
@@ -291,31 +292,29 @@ function TodoApp({token}) {
     };
 
     const updateList = async (note_id, newList) => {
-        if (newList !== Tasks) {
-            try {
-                const response = await fetch(url + '/updateList', {
-                    method: 'POST',
-                    headers: { 
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        'note_id': note_id, 
-                        'list': newList
-                    })
+        console.log("updateList");
+        console.log(newList);
+        try {
+            const response = await fetch(url + '/updateList', {
+                method: 'POST',
+                headers: { 
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    'note_id': note_id, 
+                    'list': newList
                 })
+            })
 
-                if (response.ok) {
-                    const data = await response.json()
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (error) {
-                console.log('Error: ', error);
+            if (response.ok) {
+                const data = await response.json()
+                return true;
+            } else {
+                return false;
             }
-        } else {
-            return true; // List didn't need to be updated
+        } catch (error) {
+            console.log('Error: ', error);
         }
     }
 
@@ -382,11 +381,25 @@ function TodoApp({token}) {
         }
     };
 
+    // Delete the task from the front-end
+    const removeTaskFromList = (task_id) => {
+        setTasks( Tasks.filter((element) => {
+            return element[0] !== task_id;
+        }));
+    };
 
     // Delete the task from the list
     const deleteTask = async (task_id) => {
+
+        // New task
+        if (task_id.toString().includes('newTask')) {
+            removeTaskFromList(task_id);
+            return;
+        }
+
+        // Existing task
         try {
-           const response = await fetch(url + '/deleteTask', {
+            const response = await fetch(url + '/deleteTask', {
                 method: 'DELETE',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -395,10 +408,7 @@ function TodoApp({token}) {
                 body: JSON.stringify({ task_id }),
             })
             if (response.ok) {
-                // Delete the task from the front-end
-                setTasks( Tasks.filter((element) => {
-                    return element[0] !== task_id;
-                }));
+            removeTaskFromList(task_id);
             } else {
                 console.log("Something went wrong deleting the task!");
             }
@@ -426,6 +436,7 @@ function TodoApp({token}) {
                 title={Title}
                 noteType={NoteType}
                 list={Tasks}
+                setList={setTasks}
                 message={Message}
                 createNote={createNote}
                 updateNote={updateNote}
