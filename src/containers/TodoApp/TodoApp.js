@@ -11,11 +11,11 @@ function TodoApp({token}) {
 
     const [logout, setLogout] = useState(false);
     const [Mode, setMode] = useState('btn-radio-notes'); // State to manage which type of notes is visible
-    const [NoteType, setNoteType] = useState(0); // State to manage which type of notes is visible
+    const [NoteType, setNoteType] = useState(0); // State to manage which type of notes is visible. Note = 0, List = 1
     const [AllNotes, setAllNotes] = useState([]); // State to keep track of all notes assocciated with the user
     const [VisibleNotes, setVisibleNotes] = useState([]); // State to keep track of the visible notes
-    const [Message, setMessage] = useState(null); // State to keep track of the note message
-    const [Tasks, setTasks] = useState(null); // State to keep track of the task list
+    const [Message, setMessage] = useState(''); // State to keep track of the note message
+    const [Tasks, setTasks] = useState([]); // State to keep track of the task list
     const [NoteId, setNoteId] = useState(null); // State to keep track of the title
     const [Title, setTitle] = useState(null); // State to keep track of the title
     const [ShowModal, setShowModal] = useState(false); // State to manage modal visibility
@@ -32,35 +32,36 @@ function TodoApp({token}) {
         note: 0,
         list: 1
     }
-        // Retreive all notes/lists associated with the user
-        const getNotes = async () => {
-            try {
-                const response = await fetch(url + '/getNotes', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json',
-                    },
-                });
     
-                if (response.ok) { // in the 200 range)
-                    const data = await response.json();
-    
-                    if (data.notes === "No notes Found") {
-                        // setAllNotes([{note_id: -1}])
-                        return;
-                    } else{
-                        setAllNotes(data.notes);
-                    }
-    
-                } else {
-                    const errorData = await response.json();
-                    console.log(errorData);
+    // Retreive all notes/lists associated with the user
+    const getNotes = async () => {
+        try {
+            const response = await fetch(url + '/getNotes', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) { // in the 200 range)
+                const data = await response.json();
+
+                if (data.notes === "No notes Found") {
+                    // setAllNotes([{note_id: -1}])
+                    return;
+                } else{
+                    setAllNotes(data.notes);
                 }
-            } catch (error) {
-                console.error('Error: ', error);
+
+            } else {
+                const errorData = await response.json();
+                console.log(errorData);
             }
-        };
+        } catch (error) {
+            console.error('Error: ', error);
+        }
+    };
 
     useEffect(() => {
         getNotes();
@@ -116,8 +117,8 @@ function TodoApp({token}) {
         setAllNotes([...AllNotes]);
         setShowModal(false); // Close the modal
         setTitle(null);
-        setMessage(null);
-        setTasks(null);
+        setMessage('');
+        setTasks([]);
         setNoteId(null);
     };
 
@@ -136,6 +137,16 @@ function TodoApp({token}) {
         } else if (note.is_note == Types.list) {
             getTasks(note);
         }
+    };
+
+    const createNew = (noteType, newTitle, noteContent) => {
+        switch (noteType) {
+            case Types.note: // Save note
+                return createNote(newTitle, noteContent);
+            case Types.list: // Save list
+                return createList(newTitle, noteContent.list);
+        }
+
     };
 
     const createNote = async (title, message) => {
@@ -164,6 +175,34 @@ function TodoApp({token}) {
             return false;
         };
     };
+    
+    const createList = async (title, list) => {
+        try {
+            const response = await fetch(url + '/createList', {
+                method: 'POST',
+                headers: { 
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'title': title, 'list': list }),
+            });
+
+            if (response.ok) { // in the 200 range
+                const data = await response.json();
+                setAllNotes([...AllNotes, data.newList]);
+                return true;
+            } else {
+                const errorData = await response.json();
+                console.log(errorData);
+                return false;
+            }
+
+        } catch (error) {
+            console.error('Error: ', error);
+            return false;
+        };
+    };
+
 
     const getMessage = async (task) => {
         try {
@@ -426,19 +465,20 @@ function TodoApp({token}) {
                 setMode={setMode} 
                 openCreateNew={openCreateNew}
                 searchNotes={searchNotes}
-                refresh={getNotes} 
+                refresh={getNotes}
                 signout={signout}
             />
             <NoteCard
                 showModal={ShowModal}
                 isNew={IsNewNote}
+                Types={Types}
                 noteId={NoteId}
                 title={Title}
                 noteType={NoteType}
                 list={Tasks}
                 setList={setTasks}
                 message={Message}
-                createNote={createNote}
+                createNew={createNew}
                 updateNote={updateNote}
                 // handleDeleteTask={deleteTask}
                 handleDeleteNote={deleteNote}

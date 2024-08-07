@@ -4,9 +4,9 @@ import { Modal, CloseButton } from 'react-bootstrap';
 import { IoCloseCircle, IoAdd } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 
-function NoteCard({ showModal, isNew, noteId, title, 
-                    noteType, list, setList, message, createNote, 
-                    updateNote, handleDeleteNote, handleClose, refresh }) {
+function NoteCard({ showModal, isNew, Types, noteId, title, 
+                    noteType, list, setList, message, createNew, 
+                    updateNote, handleDeleteNote, handleClose }) {
 
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [selectedTask, setSelectedTask] = useState(null);
@@ -22,7 +22,7 @@ function NoteCard({ showModal, isNew, noteId, title,
     useEffect(() => {
         if (showModal) {
             resizeTextAreaInput('modalTitleTextArea');
-            setOldList(list);
+
         } else {
             setNewTaskCounter(0);
             setDeleteList([]);
@@ -155,22 +155,22 @@ function NoteCard({ showModal, isNew, noteId, title,
         let newTitle = document.getElementById('modalTitleTextArea').value;
         let noteContent = null;
         switch (noteType) {
-            case 0: // Save note
+            case Types.note: // Save note
                 noteContent = document.getElementById('modalNoteTextArea').value;
                 break;
-            case 1: // Save list
+            case Types.list: // Save list
                 updateList();
                 noteContent = {list, deleteList};
                 break;
         }
 
         let saveSucceeded = (isNew? 
-            createNote(newTitle, noteContent):
+            createNew(noteType, newTitle, noteContent):
             updateNote(noteId, noteType, newTitle, noteContent))
         saveSucceeded? 
             handleClose() :
             console.log('Error saving note'); // TODO: Do something if save fails
-    }
+    };
 
     return (
         <Modal show={showModal} onHide={handleClose} className='note-modal '>
@@ -192,7 +192,7 @@ function NoteCard({ showModal, isNew, noteId, title,
             <Modal.Body className='border-0 mx-2'>
 
                 {/* Lists */}
-                {list && 
+                {noteType === Types.list &&
                     <div className='todo-list w-100'>
                             <div className='input-group w-100' id='modalListTasks'>
 
@@ -264,7 +264,7 @@ function NoteCard({ showModal, isNew, noteId, title,
 
 
                 {/* Notes */}
-                {message && 
+                {noteType === Types.note &&
                     <textarea 
                         id='modalNoteTextArea' 
                         className='text-space border border-0 rounded w-100' 
