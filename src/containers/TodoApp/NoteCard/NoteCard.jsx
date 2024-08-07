@@ -1,7 +1,7 @@
 /* Responsible for creating, or showing an existing, single note or list using a bootstrap modal */
 import React, { useEffect, useState, useRef} from 'react';
 import { Modal, CloseButton } from 'react-bootstrap';
-import { IoCloseCircle, IoAdd } from "react-icons/io5";
+import { IoCloseCircle} from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 
 function NoteCard({ showModal, isNew, Types, noteId, title, 

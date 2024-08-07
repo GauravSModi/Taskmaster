@@ -6,6 +6,9 @@ import './TodoApp.css';
 import { url } from '../../index'
 import App from '../../App';
 
+import { Modal } from 'react-bootstrap';
+import { IoCloseCircle} from "react-icons/io5";
+
 
 function TodoApp({token}) {
 
@@ -20,6 +23,7 @@ function TodoApp({token}) {
     const [Title, setTitle] = useState(null); // State to keep track of the title
     const [ShowModal, setShowModal] = useState(false); // State to manage modal visibility
     const [IsNewNote, setIsNewNote] = useState(false); // State to manage if making new note vs showing an old one
+    const [isSessionExpired, setIsSessionExpired] = useState(false); //
 
     // Used to help switch visible notes
     const Modes = {
@@ -32,36 +36,6 @@ function TodoApp({token}) {
         note: 0,
         list: 1
     }
-    
-    // Retreive all notes/lists associated with the user
-    const getNotes = async () => {
-        try {
-            const response = await fetch(url + '/getNotes', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) { // in the 200 range)
-                const data = await response.json();
-
-                if (data.notes === "No notes Found") {
-                    // setAllNotes([{note_id: -1}])
-                    return;
-                } else{
-                    setAllNotes(data.notes);
-                }
-
-            } else {
-                const errorData = await response.json();
-                console.log(errorData);
-            }
-        } catch (error) {
-            console.error('Error: ', error);
-        }
-    };
 
     useEffect(() => {
         getNotes();
@@ -70,6 +44,10 @@ function TodoApp({token}) {
         }, 60000);
         return () => clearInterval(intervalId);
     }, []);
+
+    useEffect(() => {
+        changeMode();
+    }, [Mode]);
 
     const changeMode = () => {
         switch(Mode) {
@@ -82,11 +60,6 @@ function TodoApp({token}) {
                 break;
         }
     };
-
-
-    useEffect(() => {
-        changeMode();
-    }, [Mode]);
 
     const changeVisible = () => {
         setVisibleNotes(AllNotes.filter((curr) => {
@@ -121,7 +94,39 @@ function TodoApp({token}) {
         setTasks([]);
         setNoteId(null);
     };
+    
+    // Retreive all notes/lists associated with the user
+    const getNotes = async () => {
+        try {
+            const response = await fetch(url + '/getNotes', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+            });
 
+            // console.log("Response: ", response);
+
+            if (response.ok) { // in the 200 range
+                const data = await response.json();
+
+                setIsSessionExpired(false);
+
+                if (data.notes !== "No notes Found") {
+                    setAllNotes(data.notes);
+                }
+
+            } else if (response.status === 403) {
+                setIsSessionExpired(true);
+            } else {
+                const errorData = await response.json();
+                console.log(errorData);
+            }
+        } catch (error) {
+            console.error('Error: ', error);
+        }
+    };
 
     const openCreateNew = () => {
         setIsNewNote(true);
@@ -486,6 +491,26 @@ function TodoApp({token}) {
             />
 
             <Notes VisibleNotes={VisibleNotes} openNote={openNote} Mode={Mode} />
+
+
+            <Modal show={isSessionExpired} onHide={()=>setIsSessionExpired(false)} id='session-expired-modal'>
+                <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={()=>setIsSessionExpired(false)}>
+                    <IoCloseCircle color='#0d6efd' size='2.5em' />
+                </button>
+
+                <Modal.Header className='border-0 pb-0 me-4'>
+                    <h1>Session expired</h1>
+                </Modal.Header>
+
+                <Modal.Body className='border-0 mx-2'>
+                    <p>Session expired. Redirecting to login.</p>
+                </Modal.Body>
+                <Modal.Footer >
+                    <button type='button' className='btn btn-primary px-3' onClick={signout}>Ok</button>
+                </Modal.Footer>
+            </Modal>
+
+
         </div>
         // </div>
     );
