@@ -23,7 +23,7 @@ function TodoApp({token}) {
     const [Title, setTitle] = useState(null); // State to keep track of the title
     const [ShowModal, setShowModal] = useState(false); // State to manage modal visibility
     const [IsNewNote, setIsNewNote] = useState(false); // State to manage if making new note vs showing an old one
-    const [isSessionExpired, setIsSessionExpired] = useState(false); //
+    const [isSessionExpired, setIsSessionExpired] = useState(false); // State to manage if JWT has expired
 
     // Used to help switch visible notes
     const Modes = {
@@ -151,7 +151,6 @@ function TodoApp({token}) {
             case Types.list: // Save list
                 return createList(newTitle, noteContent.list);
         }
-
     };
 
     const createNote = async (title, message) => {
