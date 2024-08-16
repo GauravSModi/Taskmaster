@@ -2,10 +2,10 @@ import { Sidebar, Menu, MenuItem, SubMenu, menuClasses, sidebarClasses } from 'r
 import './Sidebar.css';
 
 
-function AppSidebar() {
+function AppSidebar({token}) {
     return (
-        <div className='app-sidebar'
-        style={{display: 'flex', height: '100%'}}>
+        <div className='sidebar m-5 p-2'
+            style={{display: 'flex', height: '100%'}}>
             <Sidebar
                 // collapsed // Collapses sidebar by default
                 rootStyles={{

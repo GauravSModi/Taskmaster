@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import LoginForm from './containers/Auth/Login';
 import {jwtDecode} from 'jwt-decode';
-import TodoApp from './containers/TodoApp/TodoApp';
+import Home from './containers/Home/Home';
 import './App.css';
 
 
@@ -28,11 +28,11 @@ function App() {
     }, [])
 
     if (signedIn) {
-        return <TodoApp token={token} className='w-100'/>;
+        return <Home token={token}/>;
     }
 
     return (
-        <div className="App">
+        <div className="App vh-100 vw-100">
             <LoginForm />
         </div>
     );

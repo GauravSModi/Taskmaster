@@ -24,3 +24,6 @@ yarn-error.log*
 
 # Million Lint
 .million
+
+# Environment variables
+.env

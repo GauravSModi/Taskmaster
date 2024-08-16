@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TodoApp from '../TodoApp/TodoApp';
+import Home from '../Home/Home';
 import SignupForm from './Signup';
 import logo from '../../logo.svg';
 import './Auth.css';
@@ -65,7 +65,7 @@ const LoginForm = () => {
             const response = await fetch(url + '/login', {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ username, password }),
             });
@@ -100,7 +100,7 @@ const LoginForm = () => {
     };
 
     if (loginSuccess) {
-        if (token != null) return <TodoApp token={token} className='w-100'/>;
+        if (token != null) return <Home token={token} className='w-100 h-100'/>;
     }
 
     if (isSignup) {

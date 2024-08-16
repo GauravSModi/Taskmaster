@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TodoApp from '../TodoApp/TodoApp';
+import Home from '../Home/Home';
 import LoginForm from './Login';
 import logo from '../../logo.svg';
 import './Auth.css';
@@ -101,7 +101,7 @@ const SignupForm = () => {
     };
 
     if (signupSuccess) {
-        if (token != null) return <TodoApp token={token} className='w-100'/>;
+        if (token != null) return <Home token={token} className='w-100'/>;
     }
 
     if (isLogin) {

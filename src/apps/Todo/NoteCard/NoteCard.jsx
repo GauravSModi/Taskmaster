@@ -1,8 +1,9 @@
 /* Responsible for creating, or showing an existing, single note or list using a bootstrap modal */
-import React, { useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState} from 'react';
 import { Modal, CloseButton } from 'react-bootstrap';
-import { IoCloseCircle} from "react-icons/io5";
+import { IoCloseCircle } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
+import appendAlert from '../../../components/Alert/AlertComponent';
 
 function NoteCard({ showModal, isNew, Types, noteId, title, 
                     noteType, list, setList, message, createNew, 
@@ -11,18 +12,15 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const [selectedTask, setSelectedTask] = useState(null);
     const [hoveredTask, setHoveredTask] = useState(null);
-    const [oldList, setOldList] = useState(list);
     const [deleteList, setDeleteList] = useState([]);
     const [newTaskCounter, setNewTaskCounter] = useState(0);
     const [newTaskActive, setNewTaskActive] = useState(null);
-    const [newTaskTextarea, setNewTaskTextarea] = useState(null);
     const [newTaskCreated, setNewTaskCreated] = useState(false);
 
     // Resize Title text area height when modal is activated
     useEffect(() => {
         if (showModal) {
             resizeTextAreaInput('modalTitleTextArea');
-
         } else {
             setNewTaskCounter(0);
             setDeleteList([]);
@@ -57,7 +55,6 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
             document.getElementById('modalNewTaskTextarea').value = '';
         }
     };
-
 
     const focusOnLastTaskCreated = () => {
         try {
@@ -122,7 +119,6 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
         if (!task_id.toString().includes('newTask')) {
             setDeleteList([...deleteList, task_id]);
         }
-
         removeNewTaskFromList(task_id);
     };
 
@@ -169,17 +165,17 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
             updateNote(noteId, noteType, newTitle, noteContent))
         saveSucceeded? 
             handleClose() :
-            console.log('Error saving note'); // TODO: Do something if save fails
+            appendAlert(document.getElementById('error-alert'), 'Error saving note', 'danger');
     };
 
     return (
-        <Modal show={showModal} onHide={handleClose} className='note-modal '>
+        <Modal show={showModal} onHide={handleClose} className='note-modal' id='note-modal'>
             <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={handleClose}>
                 <IoCloseCircle color='#0d6efd' size='2.5em' />
             </button>
             <Modal.Header className='border-0 pb-0 me-4'>
                 <textarea
-                    className='title bg-transparent overflow-auto mx-2 border-0 rounded fs-3 w-100'
+                    className='title bg-transparent overflow-auto mx-2 border-0 fs-3 w-100'
                     id='modalTitleTextArea'
                     rows={1}
                     placeholder='Title'
@@ -189,87 +185,64 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
                 {/* <button type="button" className="btn-close position-absolute top-0 end-0" aria-label="Close" onClick={handleClose}></button> */}
             </Modal.Header>
     
-            <Modal.Body className='border-0 mx-2'>
+            <Modal.Body className='mx-2' id='note-body'>
 
                 {/* Lists */}
                 {noteType === Types.list &&
                     <div className='todo-list w-100'>
-                            <div className='input-group w-100' id='modalListTasks'>
+                        <div className='input-group w-100' id='modalListTasks'>
 
-                                {/* Existing tasks */}
-
-                                {list.map(task => (
-                                    <div
-                                        key={task[0]}
-                                        className="form-check d-flex flex-row"
-                                        onMouseEnter={() => handleTaskHover(task[0])}
-                                        onMouseLeave={handleTaskLeave}
-                                        onFocus={() => handleTaskFocus(task[0])}
-                                        onBlur={handleTaskBlur} >
-
-                                        <input className="form-check-input" type="checkbox" id={task[0]} defaultChecked={task[2] === 1} />
-                                        {/* <label className="form-check-label text-decoration-line-through" htmlFor={task[0]}>
-                                            {task[1]}
-                                        </label> */}
-                                        <textarea 
-                                            className='text-space w-100 border-0 ms-1 me-4 pe-3' 
-                                            id={`modal-${task[0]}`}
-                                            htmlFor={task[0]} 
-                                            defaultValue={task[1]} 
-                                            rows={1}
-                                            onInput={(event) => resizeTextAreaInput(event.target.id)}/>
-                                        {(hoveredTask === task[0] || selectedTask === task[0]) && (
-                                            // <button type='button' className='btn taskDeleteBttn p-0 m-0' id='close-button' onClick={handleClose}><IoCloseCircle color='#0d6efd' size='1.5em' /></button>
-                                            <CloseButton
-                                                className='taskDeleteBttn'
-                                                onClick={() => handleDeleteTask(task[0])}
-                                            />
-                                        )}
-                                    </div>
-                                ))}
-
-                                {/* New task */}
-
-                                <div 
-                                    className='form-check w-100 d-flex flex-row m-0 p-0'
-                                    onKeyDown={handleNewTask}
-                                    onMouseEnter={() => handleTaskHover(-1)}
+                            {/* Existing tasks */}
+                            {list.map(task => (
+                                <div
+                                    key={task[0]}
+                                    className="form-check d-flex flex-row"
+                                    onMouseEnter={() => handleTaskHover(task[0])}
                                     onMouseLeave={handleTaskLeave}
-                                    onFocus={() => handleTaskFocus(-1)}
+                                    onFocus={() => handleTaskFocus(task[0])}
                                     onBlur={handleTaskBlur} >
-                                    {/* <input className='form-check-input' type='checkbox' id='newTaskCheckbox' /> */}
 
-
-                                    <IoMdAdd className='plus-icon border-0' id='newTask' color='#4A5058' size='1em' />
-                                    
+                                    <input className="form-check-input" type="checkbox" id={task[0]} defaultChecked={task[2] === 1} />
                                     <textarea 
-                                        id={'modalNewTaskTextarea'}
                                         className='text-space w-100 border-0 ms-1 me-4 pe-3' 
-                                        htmlFor={'newTask'} 
-                                        placeholder={'List item'}
+                                        id={`modal-${task[0]}`}
+                                        htmlFor={task[0]} 
+                                        defaultValue={task[1]} 
                                         rows={1}
-                                        onInput={(event) => resizeTextAreaInput(event.target.id)} />
-                                        {/* {(hoveredTask === -1 || selectedTask === -1) && (
-                                            // <button type='button' className='btn taskDeleteBttn p-0 m-0' id='close-button' onClick={handleClose}><IoCloseCircle color='#0d6efd' size='1.5em' /></button>
-                                            <CloseButton
-                                                className='taskDeleteBttn'
-                                                onClick={handleDeleteNewTask}
-                                            />
-                                        )} */}
+                                        onInput={(event) => resizeTextAreaInput(event.target.id)}/>
+                                    {(hoveredTask === task[0] || selectedTask === task[0]) && (
+                                        <CloseButton
+                                            className='taskDeleteBttn'
+                                            onClick={() => handleDeleteTask(task[0])}
+                                        />
+                                    )}
                                 </div>
+                            ))}
 
+                            {/* New task */}
+                            <div 
+                                className='form-check w-100 d-flex flex-row m-0 p-0'
+                                onKeyDown={handleNewTask} >
+
+                                <IoMdAdd className='plus-icon border-0' id='newTask' color='#4A5058' size='1em' />
+                                
+                                <textarea 
+                                    id={'modalNewTaskTextarea'}
+                                    className='text-space w-100 border-0 ms-1 me-4 pe-3' 
+                                    htmlFor={'newTask'}
+                                    placeholder={'List item'}
+                                    rows={1} />
                             </div>
+                        </div>
                     </div>
                 }
-
 
                 {/* Notes */}
                 {noteType === Types.note &&
                     <textarea 
                         id='modalNoteTextArea' 
-                        className='text-space border border-0 rounded w-100' 
+                        className='text-space border-0 w-100' 
                         placeholder='Note'
-                        // value={message}
                         defaultValue={message}
                         onInput={(event) => resizeTextAreaInput(event.target.id)} 
                         />
@@ -279,14 +252,11 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
             
             {!isNew &&
                 <Modal.Footer className='border-0 d-flex justify-content-between'>
-
-                            <button type='button' className='btn btn-danger px-3' onClick={() => handleDeleteNote(noteId)}>Delete</button>
-
-                            <div>
-                                <button type="button" className="btn btn-secondary" onClick={handleClose}>Cancel</button>
-                                <button type="button" className="btn btn-primary ms-2" style={{paddingLeft:'2rem', paddingRight:'2rem'}} onClick={saveHelper}>Save</button>
-                            </div>
-
+                    <button type='button' className='btn btn-danger px-3' onClick={() => handleDeleteNote(noteId)}>Delete</button>
+                    <div>
+                        <button type="button" className="btn btn-secondary" onClick={handleClose}>Cancel</button>
+                        <button type="button" className="btn btn-primary ms-2" style={{paddingLeft:'2rem', paddingRight:'2rem'}} onClick={saveHelper}>Save</button>
+                    </div>
                 </Modal.Footer>
             }
 

@@ -1,10 +1,12 @@
-const appendAlert = (alertDiv, message, type) => {
+const appendAlert = (alertDiv, message, type, options) => {
     const wrapper = document.createElement('div')
     wrapper.innerHTML = [
-      `<div class="alert alert-${type} alert-dismissible" role="alert" show={showAlert}>`,
-      `   <div>${message}</div>`,
-      '   <button type="button" id="dismissAlertBtn" class="btn-close" data-bs-dismiss="alert" onClick={closeAlert} aria-label="Close"></button>',
-      '</div>'
+        `<div class="alert alert-${type} alert-dismissible ${options} role="alert" show={showAlert}>`,
+        `   <div>${message}</div>`,
+        // '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">',
+        // '       <span aria-hidden="true">&times;</span>',
+        // '   </button>',
+        '</div>'
     ].join('')
   
     alertDiv.append(wrapper)

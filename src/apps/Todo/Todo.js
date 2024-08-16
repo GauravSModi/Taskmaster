@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AppNavbar from '../../components/Navbar/Navbar';
 import NoteCard from './NoteCard/NoteCard';
-import Notes from './Notes/Notes';
-import './TodoApp.css';
+import NoteGrid from './NoteGrid/NoteGrid';
+import './Todo.css';
 import { url } from '../../index'
 import App from '../../App';
 
@@ -41,7 +41,7 @@ function TodoApp({token}) {
         getNotes();
         const intervalId = setInterval(() => {
             getNotes();
-        }, 60000);
+        }, 600000);
         return () => clearInterval(intervalId);
     }, []);
 
@@ -137,9 +137,9 @@ function TodoApp({token}) {
     const openNote = (note) => {
         setIsNewNote(false);
         setNoteId(note.note_id);
-        if (note.is_note == Types.note) {
+        if (note.is_note === Types.note) {
             getMessage(note);
-        } else if (note.is_note == Types.list) {
+        } else if (note.is_note === Types.list) {
             getTasks(note);
         }
     };
@@ -296,9 +296,9 @@ function TodoApp({token}) {
     }
 
     const updateNoteContent = (note_id, noteType, noteContent) => {
-        if (noteType == Types.note) {
+        if (noteType === Types.note) {
             return updateMessage(note_id, noteContent);
-        } else if (noteType == Types.list){
+        } else if (noteType === Types.list){
             return updateList(note_id, noteContent);
         }
         return false;
@@ -413,7 +413,7 @@ function TodoApp({token}) {
                 closeNote();
 
                 setAllNotes( AllNotes.filter((note) => {
-                    return note.note_id != note_id;
+                    return note.note_id !== note_id;
                 }))
 
             } else {
@@ -461,9 +461,7 @@ function TodoApp({token}) {
     // };
 
     return (
-        // <div className=''>
-            // <AppSidebar className='w-25 h-25'/>
-        <div className='todo-app vh-100'>
+        <div className='todo-app'>
             <AppNavbar 
                 Mode={Mode} 
                 setMode={setMode} 
@@ -472,6 +470,7 @@ function TodoApp({token}) {
                 refresh={getNotes}
                 signout={signout}
             />
+
             <NoteCard
                 showModal={ShowModal}
                 isNew={IsNewNote}
@@ -484,13 +483,14 @@ function TodoApp({token}) {
                 message={Message}
                 createNew={createNew}
                 updateNote={updateNote}
-                // handleDeleteTask={deleteTask}
                 handleDeleteNote={deleteNote}
                 handleClose={closeNote}
             />
 
-            <Notes VisibleNotes={VisibleNotes} openNote={openNote} Mode={Mode} />
-
+            <NoteGrid 
+                VisibleNotes={VisibleNotes} 
+                openNote={openNote} 
+            />
 
             <Modal show={isSessionExpired} onHide={()=>setIsSessionExpired(false)} id='session-expired-modal'>
                 <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={()=>setIsSessionExpired(false)}>
@@ -504,14 +504,12 @@ function TodoApp({token}) {
                 <Modal.Body className='border-0 mx-2'>
                     <p>Session expired. Redirecting to login.</p>
                 </Modal.Body>
+
                 <Modal.Footer >
                     <button type='button' className='btn btn-primary px-3' onClick={signout}>Ok</button>
                 </Modal.Footer>
             </Modal>
-
-
         </div>
-        // </div>
     );
 };
 
