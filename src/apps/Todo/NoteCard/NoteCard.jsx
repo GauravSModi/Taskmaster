@@ -5,7 +5,7 @@ import { IoCloseCircle } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import appendAlert from '../../../components/Alert/AlertComponent';
 
-function NoteCard({ showModal, isNew, Types, noteId, title, 
+function NoteCard({ showNoteModal, isNew, Types, noteId, title, 
                     noteType, list, setList, message, createNew, 
                     updateNote, handleDeleteNote, handleClose }) {
 
@@ -19,13 +19,20 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
 
     // Resize Title text area height when modal is activated
     useEffect(() => {
-        if (showModal) {
+        if (showNoteModal) {
             resizeTextAreaInput('modalTitleTextArea');
+            if (noteType === Types.list){
+                for (let i = 0; i < list.length; i++) {
+                    resizeTextAreaInput('modal-'+list[i][0]); 
+                }
+            } else if (noteType === Types.note) {
+                resizeTextAreaInput('modalNoteTextArea'); 
+            }
         } else {
             setNewTaskCounter(0);
             setDeleteList([]);
         }
-    }, [showModal]);
+    }, [showNoteModal]);
 
     useEffect(() => {
         if (newTaskCreated) {
@@ -169,7 +176,7 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
     };
 
     return (
-        <Modal show={showModal} onHide={handleClose} className='note-modal' id='note-modal'>
+        <Modal show={showNoteModal} onHide={handleClose} className='note-modal' id='note-modal'>
             <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={handleClose}>
                 <IoCloseCircle color='#0d6efd' size='2.5em' />
             </button>
@@ -204,7 +211,7 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
 
                                     <input className="form-check-input" type="checkbox" id={task[0]} defaultChecked={task[2] === 1} />
                                     <textarea 
-                                        className='text-space w-100 border-0 ms-1 me-4 pe-3' 
+                                        className='text-space fw-lighter w-100 border-0 ms-1 me-4 pe-3' 
                                         id={`modal-${task[0]}`}
                                         htmlFor={task[0]} 
                                         defaultValue={task[1]} 
@@ -251,21 +258,19 @@ function NoteCard({ showModal, isNew, Types, noteId, title,
             </Modal.Body>
             
             {!isNew &&
-                <Modal.Footer className='border-0 d-flex justify-content-between'>
-                    <button type='button' className='btn btn-danger px-3' onClick={() => handleDeleteNote(noteId)}>Delete</button>
-                    <div>
-                        <button type="button" className="btn btn-secondary" onClick={handleClose}>Cancel</button>
-                        <button type="button" className="btn btn-primary ms-2" style={{paddingLeft:'2rem', paddingRight:'2rem'}} onClick={saveHelper}>Save</button>
-                    </div>
+                <Modal.Footer className='border-0 hstack gap-2'>
+                    <button type='button' className='btn btn-danger' onClick={() => handleDeleteNote(noteId)}>Delete</button>
+                    <button type="button" className="btn btn-secondary ms-auto" onClick={handleClose}>Cancel</button>
+                    <div className="vr"></div>
+                    <button type="button" className="btn btn-primary" style={{paddingLeft:'2rem', paddingRight:'2rem'}} onClick={saveHelper}>Save</button>
                 </Modal.Footer>
             }
 
             {isNew && 
-                <Modal.Footer className='border-0 d-flex justify-content-end'>
-                    <div>
-                        <button type="button" className="btn btn-secondary" onClick={handleClose}>Cancel</button>
-                        <button type="button" className="btn btn-primary ms-2" style={{paddingLeft:'2rem', paddingRight:'2rem'}} onClick={saveHelper}>Create</button>
-                    </div>
+                <Modal.Footer className='border-0 hstack gap-2'>
+                    <button type="button" className="btn btn-secondary ms-auto" onClick={handleClose}>Cancel</button>
+                    <div className="vr"></div>
+                    <button type="button" className="btn btn-primary" style={{paddingLeft:'2rem', paddingRight:'2rem'}} onClick={saveHelper}>Create</button>
                 </Modal.Footer>
             }
 

@@ -5,7 +5,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import logo from "../../logo.svg";
 import './Navbar.css';
 
-function AppNavbar({Mode, setMode, openCreateNew, searchNotes, refresh, signout}) {
+function AppNavbar({Mode, setMode, openCreateNewNoteModal, openAiNoteModal, searchNotes, refresh, signout}) {
 
     const handleModeChange = (event) => {
         if (event.target.id != Mode) {
@@ -63,12 +63,12 @@ function AppNavbar({Mode, setMode, openCreateNew, searchNotes, refresh, signout}
                             </label>
                         </div>
                     
-                        <button className="btn m-2 p-2" type='button' onClick={openCreateNew} id='create-new'> 
+                        <button className="btn m-2 p-2" type='button' onClick={openCreateNewNoteModal} id='create-new-note'> 
                                 <FaCirclePlus color='#0d6efd' size='2em' title='Create New Note' className='createNewButton'/>
                         </button>
 
-                        <button className="btn m-2 p-2" type='button' onClick={openCreateNew} id='create-new'> 
-                                <IoSparklesSharp color='#0d6efd' size='2em' title='AI notes' className='createNewButton'/>
+                        <button className="btn m-2 p-2" type='button' onClick={openAiNoteModal} id='create-new-ai'> 
+                                <IoSparklesSharp color='#0d6efd' size='2em' title='AI notes' className='createNewAiButton'/>
                         </button>
 
                         <button className="btn m-2 p-2" type='button' onClick={refresh} id='create-new'> 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AppNavbar from '../../components/Navbar/Navbar';
+import AiNoteCard from './AiNoteCard/AiNoteCard';
 import NoteCard from './NoteCard/NoteCard';
 import NoteGrid from './NoteGrid/NoteGrid';
 import './Todo.css';
@@ -10,7 +11,7 @@ import { Modal } from 'react-bootstrap';
 import { IoCloseCircle} from "react-icons/io5";
 
 
-function TodoApp({token}) {
+function TodoApp({token, setLoading}) {
 
     const [logout, setLogout] = useState(false);
     const [Mode, setMode] = useState('btn-radio-notes'); // State to manage which type of notes is visible
@@ -21,7 +22,9 @@ function TodoApp({token}) {
     const [Tasks, setTasks] = useState([]); // State to keep track of the task list
     const [NoteId, setNoteId] = useState(null); // State to keep track of the title
     const [Title, setTitle] = useState(null); // State to keep track of the title
-    const [ShowModal, setShowModal] = useState(false); // State to manage modal visibility
+    const [showNoteModal, setShowNoteModal] = useState(false); // State to manage note modal visibility
+    const [showAiModal, setShowAiModal] = useState(false); // State to manage AI note modal visibility
+    const [generatingAiResponseStatus, setGeneratingAiResponseStatus] = useState(false); // State to manage spinner for AI function call
     const [IsNewNote, setIsNewNote] = useState(false); // State to manage if making new note vs showing an old one
     const [isSessionExpired, setIsSessionExpired] = useState(false); // State to manage if JWT has expired
 
@@ -88,11 +91,69 @@ function TodoApp({token}) {
     
     const closeNote = () => {
         setAllNotes([...AllNotes]);
-        setShowModal(false); // Close the modal
+        setShowNoteModal(false); // Close the modal
         setTitle(null);
         setMessage('');
         setTasks([]);
         setNoteId(null);
+    };
+
+    const openAiNoteModal = () => {
+        setShowAiModal(true);
+    }
+
+    const closeAiNoteModal = () => {
+        setShowAiModal(false);
+    }
+
+    const generateAiNote = async (prompt) => {
+        if (prompt) {
+            try {
+                const response = await fetch(url + '/generateAiNote', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 'prompt': prompt }),
+                });
+
+                if (response.ok) { // in the 200 range
+                    const data = await response.json();
+                    setIsSessionExpired(false);
+
+                    const points = data.points.map((point, index) => {
+                        return ['newTask' + index, point, 0];
+                    })
+
+                    console.log('data:', data);
+                    console.log("Title: ", data.title)
+                    console.log("Points: ", points)
+
+                    setGeneratingAiResponseStatus(false);
+                    setNoteType(Types.list);
+                    setTitle(data.title);
+                    setTasks(points);
+                    openCreateNewNoteModal();
+                    // setShowNoteModal(true); // Open the modal
+                    closeAiNoteModal();
+
+                } else if (response.status === 403) {
+                    setIsSessionExpired(true);
+                    // TODO: setGeneratingAiResponse as false and show error message
+                    // setGeneratingAiResponseStatus(false);
+                    // closeAiNoteModal();
+                } else {
+                    const errorData = await response.json();
+                    console.log(errorData);
+                    // TODO: setGeneratingAiResponse as false and show error message
+                    // setGeneratingAiResponseStatus(false);
+                    // closeAiNoteModal();
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        }
     };
     
     // Retreive all notes/lists associated with the user
@@ -128,10 +189,10 @@ function TodoApp({token}) {
         }
     };
 
-    const openCreateNew = () => {
+    const openCreateNewNoteModal = () => {
         setIsNewNote(true);
         if (NoteType === Types.note) setMessage('');
-        setShowModal(true);
+        setShowNoteModal(true);
     }
 
     const openNote = (note) => {
@@ -227,7 +288,7 @@ function TodoApp({token}) {
                     setMessage('');
                 }
                 setTitle(task.title);
-                setShowModal(true); // Open the modal
+                setShowNoteModal(true); // Open the modal
             } else {
                 const errorData = await response.json();
                 console.log(errorData);
@@ -262,7 +323,7 @@ function TodoApp({token}) {
 
                 setTitle(task.title);
                 setTasks(task_list);
-                setShowModal(true); // Open the modal
+                setShowNoteModal(true); // Open the modal
             } else {
                 const errorData = await response.json();
                 console.log(errorData);
@@ -465,14 +526,23 @@ function TodoApp({token}) {
             <AppNavbar 
                 Mode={Mode} 
                 setMode={setMode} 
-                openCreateNew={openCreateNew}
+                openCreateNewNoteModal={openCreateNewNoteModal}
+                openAiNoteModal={openAiNoteModal}
                 searchNotes={searchNotes}
                 refresh={getNotes}
                 signout={signout}
             />
 
+            <AiNoteCard 
+                showAiModal={showAiModal}
+                generateAiNote={generateAiNote}
+                handleClose={closeAiNoteModal}
+                generatingStatus={generatingAiResponseStatus}
+                setGeneratingStatus={setGeneratingAiResponseStatus}
+            />
+
             <NoteCard
-                showModal={ShowModal}
+                showNoteModal={showNoteModal}
                 isNew={IsNewNote}
                 Types={Types}
                 noteId={NoteId}
