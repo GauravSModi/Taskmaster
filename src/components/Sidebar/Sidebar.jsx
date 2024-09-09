@@ -4,7 +4,7 @@ import './Sidebar.css';
 
 function AppSidebar({token}) {
     return (
-        <div className='sidebar m-5 p-2'
+        <div className='sidebar z-3 position-absolute'
             style={{display: 'flex', height: '100%'}}>
             <Sidebar
                 // collapsed // Collapses sidebar by default

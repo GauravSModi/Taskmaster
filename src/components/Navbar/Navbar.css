@@ -6,12 +6,9 @@
     transition: fill 0.3s;
 }
 
-
 #create-new>*:active {
     fill: #2359C3;
 }
-
-
 
 #btn-radio-label:hover {
     border-color: #0a66df;
@@ -27,6 +24,13 @@
     border-color: #2359C3;
     background-color: #2359C3;
 }
+
+.navbar.navbar-fixed-top {
+    position: sticky;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
 
 /* [id^="btn-radio-label"]:hover {
     background-color: black;

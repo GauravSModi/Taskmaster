@@ -36,7 +36,7 @@ function App() {
     }
 
     return (
-        <div className="App vh-100 vw-100">
+        <div className="App w-100 h-100">
             { !loading && <LoginForm /> }
             { loading &&
                 <div className="spinner-border spinner-border-lg text-primary" style={{width: '4rem', height: '4rem'}} role="status">

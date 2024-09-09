@@ -11,9 +11,10 @@ import { Modal } from 'react-bootstrap';
 import { IoCloseCircle} from "react-icons/io5";
 
 
-function TodoApp({token, setLoading}) {
+function TodoApp({token}) {
 
     const [logout, setLogout] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [Mode, setMode] = useState('btn-radio-notes'); // State to manage which type of notes is visible
     const [NoteType, setNoteType] = useState(0); // State to manage which type of notes is visible. Note = 0, List = 1
     const [AllNotes, setAllNotes] = useState([]); // State to keep track of all notes assocciated with the user
@@ -106,58 +107,11 @@ function TodoApp({token, setLoading}) {
         setShowAiModal(false);
     }
 
-    const generateAiNote = async (prompt) => {
-        if (prompt) {
-            try {
-                const response = await fetch(url + '/generateAiNote', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 'prompt': prompt }),
-                });
 
-                if (response.ok) { // in the 200 range
-                    const data = await response.json();
-                    setIsSessionExpired(false);
-
-                    const points = data.points.map((point, index) => {
-                        return ['newTask' + index, point, 0];
-                    })
-
-                    console.log('data:', data);
-                    console.log("Title: ", data.title)
-                    console.log("Points: ", points)
-
-                    setGeneratingAiResponseStatus(false);
-                    setNoteType(Types.list);
-                    setTitle(data.title);
-                    setTasks(points);
-                    openCreateNewNoteModal();
-                    // setShowNoteModal(true); // Open the modal
-                    closeAiNoteModal();
-
-                } else if (response.status === 403) {
-                    setIsSessionExpired(true);
-                    // TODO: setGeneratingAiResponse as false and show error message
-                    // setGeneratingAiResponseStatus(false);
-                    // closeAiNoteModal();
-                } else {
-                    const errorData = await response.json();
-                    console.log(errorData);
-                    // TODO: setGeneratingAiResponse as false and show error message
-                    // setGeneratingAiResponseStatus(false);
-                    // closeAiNoteModal();
-                }
-            } catch (error) {
-                console.error('Error: ', error);
-            }
-        }
-    };
-    
     // Retreive all notes/lists associated with the user
     const getNotes = async () => {
+        setAllNotes([])
+        // setLoading(true);
         try {
             const response = await fetch(url + '/getNotes', {
                 method: 'POST',
@@ -177,12 +131,14 @@ function TodoApp({token, setLoading}) {
                 if (data.notes !== "No notes Found") {
                     setAllNotes(data.notes);
                 }
-
+                // setLoading(false);
             } else if (response.status === 403) {
                 setIsSessionExpired(true);
+                // setLoading(false);
             } else {
                 const errorData = await response.json();
                 console.log(errorData);
+                // setLoading(false);
             }
         } catch (error) {
             console.error('Error: ', error);
@@ -268,6 +224,53 @@ function TodoApp({token, setLoading}) {
         };
     };
 
+
+    const generateAiNote = async (prompt) => {
+        if (prompt) {
+            try {
+                const response = await fetch(url + '/generateAiNote', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 'prompt': prompt }),
+                });
+
+                if (response.ok) { // in the 200 range
+                    const data = await response.json();
+                    setIsSessionExpired(false);
+
+                    const points = data.points.map((point, index) => {
+                        return ['newTask' + index, point, 0];
+                    })
+
+                    setGeneratingAiResponseStatus(false);
+                    setNoteType(Types.list);
+                    setTitle(data.title);
+                    setTasks(points);
+                    openCreateNewNoteModal();
+                    // setShowNoteModal(true); // Open the modal
+                    closeAiNoteModal();
+
+                } else if (response.status === 403) {
+                    setIsSessionExpired(true);
+                    // TODO: setGeneratingAiResponse as false and show error message
+                    // setGeneratingAiResponseStatus(false);
+                    // closeAiNoteModal();
+                } else {
+                    const errorData = await response.json();
+                    console.log(errorData);
+                    // TODO: setGeneratingAiResponse as false and show error message
+                    // setGeneratingAiResponseStatus(false);
+                    // closeAiNoteModal();
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        }
+    };
+    
 
     const getMessage = async (task) => {
         try {
@@ -523,62 +526,75 @@ function TodoApp({token, setLoading}) {
 
     return (
         <div className='todo-app'>
-            <AppNavbar 
-                Mode={Mode} 
-                setMode={setMode} 
-                openCreateNewNoteModal={openCreateNewNoteModal}
-                openAiNoteModal={openAiNoteModal}
-                searchNotes={searchNotes}
-                refresh={getNotes}
-                signout={signout}
-            />
+                <div>
+                    <AppNavbar 
+                        Mode={Mode} 
+                        setMode={setMode} 
+                        openCreateNewNoteModal={openCreateNewNoteModal}
+                        openAiNoteModal={openAiNoteModal}
+                        searchNotes={searchNotes}
+                        refresh={getNotes}
+                        signout={signout}
+                    />
 
-            <AiNoteCard 
-                showAiModal={showAiModal}
-                generateAiNote={generateAiNote}
-                handleClose={closeAiNoteModal}
-                generatingStatus={generatingAiResponseStatus}
-                setGeneratingStatus={setGeneratingAiResponseStatus}
-            />
+                    <AiNoteCard 
+                        showAiModal={showAiModal}
+                        generateAiNote={generateAiNote}
+                        handleClose={closeAiNoteModal}
+                        generatingStatus={generatingAiResponseStatus}
+                        setGeneratingStatus={setGeneratingAiResponseStatus}
+                    />
 
-            <NoteCard
-                showNoteModal={showNoteModal}
-                isNew={IsNewNote}
-                Types={Types}
-                noteId={NoteId}
-                title={Title}
-                noteType={NoteType}
-                list={Tasks}
-                setList={setTasks}
-                message={Message}
-                createNew={createNew}
-                updateNote={updateNote}
-                handleDeleteNote={deleteNote}
-                handleClose={closeNote}
-            />
+                    <NoteCard
+                        showNoteModal={showNoteModal}
+                        isNew={IsNewNote}
+                        Types={Types}
+                        noteId={NoteId}
+                        title={Title}
+                        noteType={NoteType}
+                        list={Tasks}
+                        setList={setTasks}
+                        message={Message}
+                        createNew={createNew}
+                        updateNote={updateNote}
+                        handleDeleteNote={deleteNote}
+                        handleClose={closeNote}
+                    />
 
-            <NoteGrid 
-                VisibleNotes={VisibleNotes} 
-                openNote={openNote} 
-            />
 
-            <Modal show={isSessionExpired} onHide={()=>setIsSessionExpired(false)} id='session-expired-modal'>
-                <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={()=>setIsSessionExpired(false)}>
-                    <IoCloseCircle color='#0d6efd' size='2.5em' />
-                </button>
+                    { !loading && 
+                        <NoteGrid 
+                            VisibleNotes={VisibleNotes} 
+                            openNote={openNote} 
+                        />
+                    }
+                    { loading &&
+                        <div className='position-absolute top-50 start-50 translate-middle'>
+                            <div className="spinner-border spinner-border-lg text-primary" style={{width: '4rem', height: '4rem'}} role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div> 
+                        </div>
+                    }
 
-                <Modal.Header className='border-0 pb-0 me-4'>
-                    <h1>Session expired</h1>
-                </Modal.Header>
+                    <Modal show={isSessionExpired} onHide={()=>setIsSessionExpired(false)} id='session-expired-modal'>
+                        <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={()=>setIsSessionExpired(false)}>
+                            <IoCloseCircle color='#0d6efd' size='2.5em' />
+                        </button>
 
-                <Modal.Body className='border-0 mx-2'>
-                    <p>Session expired. Redirecting to login.</p>
-                </Modal.Body>
+                        <Modal.Header className='border-0 pb-0 me-4'>
+                            <h1>Session expired</h1>
+                        </Modal.Header>
 
-                <Modal.Footer >
-                    <button type='button' className='btn btn-primary px-3' onClick={signout}>Ok</button>
-                </Modal.Footer>
-            </Modal>
+                        <Modal.Body className='border-0 mx-2'>
+                            <p>Session expired. Redirecting to login.</p>
+                        </Modal.Body>
+
+                        <Modal.Footer >
+                            <button type='button' className='btn btn-primary px-3' onClick={signout}>Ok</button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>
+            
         </div>
     );
 };

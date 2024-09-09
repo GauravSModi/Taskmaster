@@ -28,7 +28,7 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals();
 
 // export const url = 'https://localhost:8442';
 export const url = 'https://10.0.0.157:8442';

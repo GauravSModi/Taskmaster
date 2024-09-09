@@ -235,7 +235,7 @@ function NoteCard({ showNoteModal, isNew, Types, noteId, title,
                                 
                                 <textarea 
                                     id={'modalNewTaskTextarea'}
-                                    className='text-space w-100 border-0 ms-1 me-4 pe-3' 
+                                    className='text-space w-100 border-0 ms-1 me-4 pe-3'
                                     htmlFor={'newTask'}
                                     placeholder={'List item'}
                                     rows={1} />
@@ -248,7 +248,7 @@ function NoteCard({ showNoteModal, isNew, Types, noteId, title,
                 {noteType === Types.note &&
                     <textarea 
                         id='modalNoteTextArea' 
-                        className='text-space border-0 w-100' 
+                        className='text-space fw-lighter border-0 w-100' 
                         placeholder='Note'
                         defaultValue={message}
                         onInput={(event) => resizeTextAreaInput(event.target.id)} 

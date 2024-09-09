@@ -17,7 +17,7 @@ function AppNavbar({Mode, setMode, openCreateNewNoteModal, openAiNoteModal, sear
         <div className='container p-0 m-0'>
             {/* fixed-top */}
             {/* sticky-top */}
-            <nav className="navbar fixed-top navbar-light bg-light shadow text-light">
+            <nav className="navbar z-1 fixed-top navbar-light bg-light shadow text-light">
                 <div className="container-fluid">
                     <a className="navbar-brand p-0 m-0" >
                         <img src={logo} alt="logo" width="60" height="60"/>
