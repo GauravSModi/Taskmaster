@@ -3,6 +3,7 @@
 ## Description
 - Responsive front-end created using React.js for full-stack productivity-enhancing web app
 - Pairs with a Node.js, Express.js, and MySQL backend providing efficient RESTful API services to handle user data, authorization, and authentication securely
+- Uses OpenAI API to generate customized lists tailored to user requests
 
 ## Components and Technologies:
 - [x] Frontend - React.js, Bootstrap, AWS Amplify
