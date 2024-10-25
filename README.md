@@ -30,4 +30,4 @@ The frontend is designed to be intuitive and user-friendly, offering a modern in
 
 ## 🚧 Demo
 
-- **Coming Soon...** Stay tuned for a live demo showcasing Taskmaster’s capabilities!
+- **Coming Soon...**
