@@ -4,7 +4,7 @@ import { Modal, CloseButton } from 'react-bootstrap';
 import { IoCloseCircle } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import appendAlert from '../../../components/Alert/AlertComponent';
-import './NoteCard.scss';
+import '../Todo.scss';
 
 function NoteCard({ showNoteModal, isNew, Types, noteId, title, 
                     noteType, list, setList, message, createNew, 

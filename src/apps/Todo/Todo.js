@@ -3,7 +3,7 @@ import AppNavbar from '../../components/Navbar/Navbar';
 import AiNoteCard from './AiNoteCard/AiNoteCard';
 import NoteCard from './NoteCard/NoteCard';
 import NoteGrid from './NoteGrid/NoteGrid';
-import './Todo.css';
+import './Todo.scss';
 import { url } from '../../index'
 import App from '../../App';
 
@@ -577,8 +577,8 @@ function TodoApp({token}) {
                     }
 
                     <Modal show={isSessionExpired} onHide={()=>setIsSessionExpired(false)} id='session-expired-modal'>
-                        <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={()=>setIsSessionExpired(false)}>
-                            <IoCloseCircle color='#0d6efd' size='2.5em' />
+                        <button type='button' className='btn position-absolute top-0 end-0' id='icon' onClick={()=>setIsSessionExpired(false)}>
+                            <IoCloseCircle size='2.5em' />
                         </button>
 
                         <Modal.Header className='border-0 pb-0 me-4'>

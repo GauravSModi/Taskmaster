@@ -1,6 +1,6 @@
 /* Responsible for rendering a user's collection of notes and lists */
 import React, { useEffect } from 'react';
-import '../Todo.css';
+import '../Todo.scss';
 
 function NoteGrid({ VisibleNotes, openNote }) {
 

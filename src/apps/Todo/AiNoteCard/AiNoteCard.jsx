@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import { IoCloseCircle} from "react-icons/io5";
 import { RxMagicWand } from "react-icons/rx";
-import './AiNoteCard.scss';
+import '../Todo.scss';
 
 function AiNoteCard({ showAiModal, generateAiNote, handleClose, generatingStatus, setGeneratingStatus }){
 

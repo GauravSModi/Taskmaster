@@ -1,3 +1,19 @@
+@import '../../styles/custom.scss';
+
+#icon>* {
+    fill: $primary;
+    transition: fill 0.3s;
+}
+
+#icon>*:hover {
+    fill: $primary-hover;
+
+}
+
+#icon>*:active {
+    fill: $primary-active;
+}
+
 /* [id^="card-"] {
     background-color: #A6B1E1; 
     color: white;
