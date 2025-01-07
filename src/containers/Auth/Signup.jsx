@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Home from '../Home/Home';
 import LoginForm from './Login';
-import logo from '../../logo.svg';
+import logo from '../../full_logo2.svg';
 import './Auth.css';
 import { url } from '../../index'
 
@@ -109,9 +109,9 @@ const SignupForm = () => {
     }
 
     return (
-        <div className="auth-form-container py-5">
+        <div className="auth-form-container-signup d-flex align-items-center justify-content-center ">
             
-            <img className="pb-4" src={logo} alt="My Logo" /> {/* Display the logo image */}
+            <img className="px-1 mx-1 pb-4 d-flex align-items-center justify-content-center" src={logo} alt="My Logo" width="300" height="300"/> {/* Display the logo image */}
             <form onSubmit={handleSignup} >
                 <div className='mb-3'>
                     {/* <label htmlFor='signupUsername' className='form-label float-start'>

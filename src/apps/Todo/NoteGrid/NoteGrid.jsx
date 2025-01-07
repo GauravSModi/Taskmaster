@@ -52,12 +52,12 @@ function NoteGrid({ VisibleNotes, openNote }) {
     return (
         <div className='w-100'>
             { VisibleNotes.length > 0 &&
-                <div className='note-card-grid row' id='note-card-grid' style={{ marginTop: '100px' }}>
+                <div className='note-card-grid row' id='note-card-grid' style={{ marginTop: '135px' }}>
                     {VisibleNotes.map(task => (
                         <div
                             key={task.note_id}
                             id={`card-${task.note_id}`}
-                            className="card cursor-pointer p-3 mx-3 my-4 rounded bg-secondary text-white"
+                            className="card cursor-pointer p-3 mx-3 my-3 rounded bg-secondary text-white fw-lighter"
                             style={{ width: "12rem" }}
                             onClick={() => openNote(task)} >
                             <div className="card-title pe-none" id={`title-${task.note_id}`}>{task.title ? task.title: <br/>}</div>

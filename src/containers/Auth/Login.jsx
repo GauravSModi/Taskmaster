@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Home from '../Home/Home';
 import SignupForm from './Signup';
-import logo from '../../logo.svg';
+import logo from '../../full_logo2.svg';
 import './Auth.css';
 import { url } from '../../index'
 import {jwtDecode} from 'jwt-decode';
@@ -108,9 +108,9 @@ const LoginForm = () => {
     }
 
     return (
-        <div className="auth-form-container">
+        <div className="auth-form-container-login d-flex align-items-center justify-content-center">
             
-            <img className="pb-5" src={logo} alt="My Logo" /> {/* Display the logo image */}
+            <img className="px-1 mx-1 pb-4 d-flex align-items-center justify-content-center" src={logo} alt="My Logo" width="300" height="300"/> {/* Display the logo image */}
             <form onSubmit={handleLogin}>
                 <div className='mb-3'>
                     {/* <label htmlFor='loginUsername' className='form-label float-start'>
@@ -143,9 +143,9 @@ const LoginForm = () => {
                 </div>
             </form>
 
-            <div className='mt-2'>
-                <button id='switchAuthButton' onClick={handleToggleForm} className='btn btn-link text-dark fw-light' type="button">
-                Don't have an account? Sign Up
+            <div className='mt-2 d-flex align-items-center justify-content-center'>
+                <button id='switchAuthButton' onClick={handleToggleForm} className='btn btn-link text-dark fw-light text-center' type="button">
+                    Don't have an account? Sign Up
                 </button>
             </div>
 
