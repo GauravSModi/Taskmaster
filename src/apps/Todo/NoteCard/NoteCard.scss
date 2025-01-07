@@ -1,0 +1,16 @@
+@import '../../../styles/custom.scss';
+
+
+#icon>* {
+    fill: $primary;
+    transition: fill 0.3s;
+}
+
+#icon>*:hover {
+    fill: $primary-hover;
+
+}
+
+#icon>*:active {
+    fill: $primary-active;
+}

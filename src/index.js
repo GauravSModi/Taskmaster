@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import ErrorPage from './containers/ErrorPage/ErrorPage';
 import reportWebVitals from './reportWebVitals';
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import {
     createBrowserRouter,
     RouterProvider,
@@ -30,7 +30,7 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 // reportWebVitals();
 
-// export const url = 'https://localhost:8442';
-export const url = 'https://10.0.0.157:8442';
+export const url = 'http://localhost:8001';
+// export const url = 'https://10.0.0.157:8442';
 // export const url = 'http://35.172.163.23:8000';
 // export const url = 'http://gauravmodi.ca:8000';

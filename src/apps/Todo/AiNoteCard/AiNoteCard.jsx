@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
 import { Modal } from 'react-bootstrap';
 import { IoCloseCircle} from "react-icons/io5";
 import { RxMagicWand } from "react-icons/rx";
-
+import './AiNoteCard.scss';
 
 function AiNoteCard({ showAiModal, generateAiNote, handleClose, generatingStatus, setGeneratingStatus }){
 
@@ -55,12 +54,12 @@ function AiNoteCard({ showAiModal, generateAiNote, handleClose, generatingStatus
 
     return (
         <Modal show={showAiModal} onHide={handleClose} className='ai-modal' id='ai-modal'>
-            <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={handleClose}>
-                <IoCloseCircle color='#0d6efd' size='2.5em' />
+            <button type='button' className='btn position-absolute top-0 end-0' id='icon' onClick={handleClose}>
+                <IoCloseCircle size='2.5em' />
             </button>
 
             <Modal.Header className='border-0 p-0 me-4 mb-0 hstack gap-1'>
-                <RxMagicWand className='my-0 py-0 ms-3 me-2' color='#0d6efd' size='1.5em'/>
+                <RxMagicWand className='my-0 py-0 ms-3 me-2' id='icon' size='1.5em'/>
                 <p className='fs-3 my-2 py-0 me-auto'>
                     Let AI help you create your note!
                 </p>

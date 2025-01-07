@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
-    "css-loader": "^6.10.0"
+    "css-loader": "^6.10.0",
+    "sass": "^1.83.1"
   }
 }

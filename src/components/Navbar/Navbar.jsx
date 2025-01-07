@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FaCirclePlus, FaRotate } from "react-icons/fa6";
 import { IoSparklesSharp } from "react-icons/io5";
 import { FaSignOutAlt } from "react-icons/fa";
-import logo from "../../logo.svg";
-import './Navbar.css';
+import logo from "../../full_logo.svg";
+// import './Navbar.scss';
+import './Navbar.scss';
 
 function AppNavbar({Mode, setMode, openCreateNewNoteModal, openAiNoteModal, searchNotes, refresh, signout}) {
 
@@ -20,7 +21,7 @@ function AppNavbar({Mode, setMode, openCreateNewNoteModal, openAiNoteModal, sear
             <nav className="navbar z-1 fixed-top navbar-light bg-light shadow text-light">
                 <div className="container-fluid">
                     <a className="navbar-brand p-0 m-0" >
-                        <img src={logo} alt="logo" width="60" height="60"/>
+                        <img src={logo} alt="logo" width="210" height="60"/>
                     </a>
                     <form className="d-flex">
 
@@ -63,20 +64,20 @@ function AppNavbar({Mode, setMode, openCreateNewNoteModal, openAiNoteModal, sear
                             </label>
                         </div>
                     
-                        <button className="btn m-2 p-2" type='button' onClick={openCreateNewNoteModal} id='create-new-note'> 
-                                <FaCirclePlus color='#0d6efd' size='2em' title='Create New Note' className='createNewButton'/>
+                        <button className="btn m-2 p-2" type='button' onClick={openCreateNewNoteModal} id='create-new'> 
+                                <FaCirclePlus size='2em' title='Create New Note' className='createNewButton'/>
                         </button>
 
-                        <button className="btn m-2 p-2" type='button' onClick={openAiNoteModal} id='create-new-ai'> 
-                                <IoSparklesSharp color='#0d6efd' size='2em' title='AI notes' className='createNewAiButton'/>
+                        <button className="btn m-2 p-2" type='button' onClick={openAiNoteModal} id='create-new'> 
+                                <IoSparklesSharp size='2em' title='AI notes' className='createNewAiButton'/>
                         </button>
 
                         <button className="btn m-2 p-2" type='button' onClick={refresh} id='create-new'> 
-                                <FaRotate color='#0d6efd' size='2em' title='Refresh' className='refresh p-0 m-0'/>
+                                <FaRotate size='2em' title='Refresh' className='refresh p-0 m-0'/>
                         </button>
 
-                        <button className="btn m-2 p-2" type='button' onClick={signout} id='signout'> 
-                                <FaSignOutAlt color='#0d6efd' size='2em' title='Sign-out' className='signout'/>
+                        <button className="btn m-2 p-2" type='button' onClick={signout} id='create-new'> 
+                                <FaSignOutAlt size='2em' title='Sign-out' className='signout'/>
                         </button>
                     </form>
                 </div>

@@ -4,6 +4,7 @@ import { Modal, CloseButton } from 'react-bootstrap';
 import { IoCloseCircle } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import appendAlert from '../../../components/Alert/AlertComponent';
+import './NoteCard.scss';
 
 function NoteCard({ showNoteModal, isNew, Types, noteId, title, 
                     noteType, list, setList, message, createNew, 
@@ -177,8 +178,8 @@ function NoteCard({ showNoteModal, isNew, Types, noteId, title,
 
     return (
         <Modal show={showNoteModal} onHide={handleClose} className='note-modal' id='note-modal'>
-            <button type='button' className='btn position-absolute top-0 end-0' id='close-button' onClick={handleClose}>
-                <IoCloseCircle color='#0d6efd' size='2.5em' />
+            <button type='button' className='btn position-absolute top-0 end-0' id='icon' onClick={handleClose}>
+                <IoCloseCircle size='2.5em' />
             </button>
             <Modal.Header className='border-0 pb-0 me-4'>
                 <textarea

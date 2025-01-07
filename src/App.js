@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
+import './styles/custom.scss';
+// import "bootstrap/dist/css/bootstrap.min.css";
 import LoginForm from './containers/Auth/Login';
 import {jwtDecode} from 'jwt-decode';
 import Home from './containers/Home/Home';
