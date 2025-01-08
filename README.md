@@ -43,5 +43,4 @@ The frontend is designed to be intuitive and user-friendly, offering a modern in
 
 - Edit your list:
 
-![list](https://github.com/user-attachments/assets/63ae19da-7b5c-4d72-9e9c-ed4798c3f2e1)
-
+![list](https://github.com/user-attachments/assets/da7b63a3-68e6-4b9e-9a0e-df7c0c312037)
