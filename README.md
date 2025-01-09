@@ -1,18 +1,22 @@
 # Taskmaster Frontend
 
-[Explore the Taskmaster Backend](https://github.com/GauravSModi/Taskmaster-backend "Taskmaster backend")
+Try it:
+www.taskmaster.gauravmodi.ca
+
+Backend repo:
+[Taskmaster-backend](https://github.com/GauravSModi/Taskmaster-backend "Taskmaster backend")
 
 ## 🚀 Overview
 
 **Taskmaster** is a responsive and feature-rich productivity web app designed to simplify your task management experience. Built with React.js, this app pairs seamlessly with a powerful Node.js, Express.js, and MySQL backend to deliver secure and efficient task management solutions.
 
-The frontend is designed to be intuitive and user-friendly, offering a modern interface powered by AWS Amplify. Whether you need to create, organize, or search through tasks, Taskmaster provides a dynamic and AI-enhanced approach to managing your daily workload.
+The frontend is designed to be intuitive and user-friendly, and offers a modern interface. Whether you need to create, organize, or search through tasks, Taskmaster provides a dynamic and AI-enhanced approach to managing your daily workload.
 
 ## 🛠️ Technologies Used
 
-- **Frontend**: React.js, Bootstrap, AWS Amplify
+- **Frontend**: React.js, Bootstrap, Vercel
 - **Database**: MySQL, AWS RDS
-- **Backend**: Node.js, Express.js, AWS EC2, Docker
+- **Backend**: Node.js, Express.js, AWS EC2, OpenAI API
 
 ## ✨ Key Features
 
@@ -24,7 +28,7 @@ The frontend is designed to be intuitive and user-friendly, offering a modern in
 
 ## 📦 Components and Architecture
 
-- **Frontend**: Built using React.js and styled with Bootstrap for a sleek and responsive user experience. Deployed and managed via AWS Amplify.
+- **Frontend**: Built using React.js and styled with Bootstrap for a sleek and responsive user experience. Deployed and managed via Vercel.
 - **Backend**: A Node.js and Express.js server handles the app's core functionality, hosted on AWS EC2 with Docker for scalable deployments.
 - **Database**: MySQL database hosted on AWS RDS ensures data reliability and performance.
 
