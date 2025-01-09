@@ -4,6 +4,7 @@ import './styles/custom.scss';
 import LoginForm from './containers/Auth/Login';
 import {jwtDecode} from 'jwt-decode';
 import Home from './containers/Home/Home';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import './App.css';
 
 
@@ -44,6 +45,8 @@ function App() {
                     <span className="visually-hidden">Loading...</span>
                 </div> 
             }
+
+            <SpeedInsights />
         </div>
     );
 }
