@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import TodoApp from '../../apps/Todo/Todo';
-import AppSidebar from '../../components/Sidebar/Sidebar';
+// import AppSidebar from '../../components/Sidebar/Sidebar';
 
 function Home ({ token }){
     return (

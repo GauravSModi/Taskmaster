@@ -3,13 +3,12 @@ import { FaCirclePlus, FaRotate } from "react-icons/fa6";
 import { IoSparklesSharp } from "react-icons/io5";
 import { FaSignOutAlt } from "react-icons/fa";
 import logo from "../../full_logo.svg";
-// import './Navbar.scss';
 import './Navbar.scss';
 
 function AppNavbar({Mode, setMode, openCreateNewNoteModal, openAiNoteModal, searchNotes, refresh, signout}) {
 
     const handleModeChange = (event) => {
-        if (event.target.id != Mode) {
+        if (event.target.id !== Mode) {
             setMode(event.target.id);
         }
     };

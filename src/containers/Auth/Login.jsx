@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Home from '../Home/Home';
 import SignupForm from './Signup';
 import logo from '../../full_logo2.svg';
 import './Auth.css';
 import { url } from '../../index'
-import {jwtDecode} from 'jwt-decode';
+// import {jwtDecode} from 'jwt-decode';
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');

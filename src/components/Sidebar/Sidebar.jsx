@@ -1,4 +1,4 @@
-import { Sidebar, Menu, MenuItem, SubMenu, menuClasses, sidebarClasses } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses } from 'react-pro-sidebar';
 import './Sidebar.css';
 
 
