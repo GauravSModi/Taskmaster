@@ -33,18 +33,14 @@ The frontend is designed to be intuitive and user-friendly, and offers a modern 
 - **Database**: MySQL database hosted on AWS RDS ensures data reliability and performance.
 
 ## 👀 Demo
-- Login:
-
+Login:
 ![login](https://github.com/user-attachments/assets/3767f98d-3274-4ebd-aab3-26cbaad570a4)
 
-- Home:
-
+Home:
 ![home](https://github.com/user-attachments/assets/fa23ce50-9036-4f1d-9ba7-fa2fdde235d9)
 
-- Create a list using AI:
-
+Create a list using AI:
 ![AI list](https://github.com/user-attachments/assets/00b4c42c-6817-4ca6-b495-9d5afd64b598)
 
-- Edit your list:
-
+Edit your list:
 ![list](https://github.com/user-attachments/assets/da7b63a3-68e6-4b9e-9a0e-df7c0c312037)
