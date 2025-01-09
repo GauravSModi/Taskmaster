@@ -29,7 +29,7 @@ The frontend is designed to be intuitive and user-friendly, and offers a modern 
 ## 📦 Components and Architecture
 
 - **Frontend**: Built using React.js and styled with Bootstrap for a sleek and responsive user experience. Deployed and managed via Vercel.
-- **Backend**: A Node.js and Express.js server handles the app's core functionality, hosted on AWS EC2 with Docker for scalable deployments.
+- **Backend**: A Node.js and Express.js server hosted on AWS EC2 handles the app's core functionality.
 - **Database**: MySQL database hosted on AWS RDS ensures data reliability and performance.
 
 ## 👀 Demo
