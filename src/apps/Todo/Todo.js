@@ -586,7 +586,7 @@ function TodoApp({token}) {
                         </Modal.Header>
 
                         <Modal.Body className='border-0 mx-2'>
-                            <p>Session expired. Redirecting to login.</p>
+                            <p>Redirecting to login.</p>
                         </Modal.Body>
 
                         <Modal.Footer >
